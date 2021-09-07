@@ -21,8 +21,18 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="eljl.service.controller" />
 	
+	<context:component-scan base-package="eljl.service.*"></context:component-scan>
+	<context:component-scan base-package="eljl.factory.*"></context:component-scan>
 	
+	<!-- Gson 등록 -->
+	<beans:bean class="com.google.gson.Gson">
+	</beans:bean>
+	
+	<!-- img -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="204857600"></beans:property>
+		<beans:property name="defaultEncoding" value="utf-8"></beans:property>
+	</beans:bean>
 	
 </beans:beans>
