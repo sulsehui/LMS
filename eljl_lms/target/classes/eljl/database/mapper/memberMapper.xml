@@ -10,12 +10,16 @@
  		insert into tb_t values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'W','성공')
  	</insert>
  	
- 	<select id="getId" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 	<select id="isTeId" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
  		select count(*) from tb_t where T_CODE = #{mbId}
  	</select>
  	
- 	<select id="getPw" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 	<select id="getTePw" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
  		select T_PASSWORD as "mbPw" from tb_t where T_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="dupCheck" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from tb_t where T_CODE = #{mbId}
  	</select>
  	
  </mapper>

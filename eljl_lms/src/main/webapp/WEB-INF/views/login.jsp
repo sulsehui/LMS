@@ -6,8 +6,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script type="text/javascript" src="resources/js/master.js"></script>
 <script type="text/javascript">
 
+// 로그인
 function submit(){
 	let mbId = document.getElementsByName("mbId")[0];
 	let mbPw = document.getElementsByName("mbPw")[0];
@@ -27,19 +29,15 @@ function submit(){
 	f.submit();
 }
 
-
-function makeForm(action,method,name = null){
-	let form = document.createElement("form");
-	
-	if(name != null){form.setAttribute("name",name);}
-	form.setAttribute("action",action);
-	form.setAttribute("method",method);
-	form.setAttribute("enctype","multipart/form-data");
-	
-	return form;
+// 로그인 실패시 알림
+function message(message){
+	if(message != ""){
+		alert(message);
+	}
 }
+
 </script>
-<body>
+<body onload="message('${message}')">
 
 	<input type="radio" value="T" name="mbType" checked="checked">선생님
 	<input type="radio" value="S" name="mbType">학생 <br>
