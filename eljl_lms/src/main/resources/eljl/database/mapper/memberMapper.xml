@@ -6,8 +6,12 @@
  
  <mapper namespace="eljl.database.mapper.memberMapper">
  
- 	<insert id="join" parameterType="eljl.factory.bean.UserInfoBean" >
+ 	<insert id="joinTe" parameterType="eljl.factory.bean.UserInfoBean" >
  		insert into tb_t values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'W','성공')
+ 	</insert>
+ 	
+ 	<insert id="joinStu" parameterType="eljl.factory.bean.UserInfoBean" >
+ 		insert into stu values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'O')
  	</insert>
  	
  	<select id="isTeId" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
@@ -18,8 +22,27 @@
  		select T_PASSWORD as "mbPw" from tb_t where T_CODE = #{mbId}
  	</select>
  	
- 	<select id="dupCheck" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 	<select id="dupCheckTe" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
  		select count(*) from tb_t where T_CODE = #{mbId}
  	</select>
  	
+ 	<select id="dupCheckStu" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from stu where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="isStuId" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from stu where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="getStuPw" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select STU_PASSWORD as "mbPw" from stu where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="selectTeMail" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select T_MAIL from tb_t where T_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="selectStuMail" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select STU_MAIL from stu where STU_CODE = #{mbId}
+ 	</select>
  </mapper>

@@ -44,6 +44,12 @@ function message(message){
 	아이디<input type="text" name="mbId" /> <br>
 	비밀번호<input type="password" name="mbPw" />
 	<input type="button" value="로그인" onClick="submit()"/>
-
+	<br>
+	<a href="/joinTeForm">선생님회원가입</a>
+	<br>
+	<a href="/joinStuForm">학생회원가입</a>
+	<br>
+	<a href="/pwChangeForm">비밀번호변경</a>
+	
 </body>
 </html>

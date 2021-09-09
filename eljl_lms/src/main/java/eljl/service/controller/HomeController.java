@@ -47,14 +47,38 @@ public class HomeController {
 	
 	// 학생 회원가입
 	@PostMapping(value = "/joinStudent")
-	public String joinStudent() {
-		return "joinStudent";
+	public ModelAndView joinStudent(@ModelAttribute UserInfoBean ub) {
+		return ls.joinStudentCtl(ub);
+	}
+	
+	// 비밀번호 변경페이지로 이동
+	@RequestMapping(value = "/pwChangeForm", method = RequestMethod.GET)
+	public String pwChangeForm() {
+		return "pwChangeForm";
+	}
+	
+	// 로그인 페이지로 이동
+	@RequestMapping(value = "/loginForm", method = RequestMethod.GET)
+	public String loginForm() {
+		return "login";
 	}
 	
 	//회원가입폼으로 가기
-	@RequestMapping(value = "/joinForm", method = RequestMethod.GET)
-	public String joinForm() {
+	@RequestMapping(value = "/joinTeForm", method = RequestMethod.GET)
+	public String joinTeForm() {
 		return "joinTeacher";
+	}
+	
+	//학생가입폼으로 가기
+	@RequestMapping(value = "/joinStuForm", method = RequestMethod.GET)
+	public String joinStuForm() {
+		return "joinStudent";
+	}
+	
+	//메인폼으로 가기
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	public String main() {
+		return "main";
 	}
 	
 	//중복체크
@@ -70,6 +94,18 @@ public class HomeController {
 		return ls.loginCtl(ub);
 	}
 	
+	//비밀번호 변경 인증
+	@PostMapping("/usAuthen")
+	@ResponseBody
+	public String usAuthen(@ModelAttribute UserInfoBean ub) {
+		return ls.usAuthen(ub);
+	}
+	
+	//비밀번호 변경 이메일 전송
+	@PostMapping("/pwChangeMail")
+	public void pwChangeMail(@ModelAttribute UserInfoBean ub) {
+		ls.pwChangeMail(ub);
+	}
 	
 }
 

@@ -114,7 +114,7 @@
 </script>
 </head>
 <body>
-
+	선생님회원가입 <br>
 	<input type="text" name="mbId" onblur="idCheck()" /> id
 	<br>
 	<div id="idCheck"></div>
@@ -140,6 +140,8 @@
 	<input type="file" />
 	<br>
 	<input type="button" onClick="submit()" value="전송" />
-
+	<br>
+	<a href="/loginForm">로그인페이지</a>
+	
 </body>
 </html>
