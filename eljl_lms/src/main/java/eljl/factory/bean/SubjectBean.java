@@ -1,6 +1,7 @@
 package eljl.factory.bean;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,4 +14,7 @@ public class SubjectBean {
 	String opName;
 	Date startDate;
 	Date endDate;
+	
+	List<GradeBean> gbList;
+	
 }

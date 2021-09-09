@@ -25,12 +25,14 @@ public class HomeAjaxController {
 	
 	//createLecture
 	@PostMapping("/createLecture")
-	public void createLecture(@RequestBody List<SubjectBean> sb,@RequestBody List<GradeBean> gb) {
+	public void createLecture(@RequestBody List<SubjectBean> sb) {
 		System.out.println(sb.get(0).getCsName()+sb.get(0).getStartDate()+sb.get(0).getEndDate());
 		
-		for(int i=0; i<gb.size(); i++) {
-			System.out.println(gb.get(i).getItemCode()+gb.get(i).getItemPercent()+gb.get(i).getItemName());
-		}
+	
+			System.out.println(sb.get(0).getGbList().get(0).getItemCode());
+			System.out.println(sb.get(0).getGbList().get(0).getItemPercent());
+			System.out.println(sb.get(0).getGbList().get(0).getItemName());
+	
 	}
 	
 }
