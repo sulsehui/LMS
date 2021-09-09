@@ -14,7 +14,6 @@ public class SubjectBean {
 	String opName;
 	Date startDate;
 	Date endDate;
-	
 	List<GradeBean> gbList;
 	
 }

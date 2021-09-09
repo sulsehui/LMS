@@ -52,8 +52,8 @@
 	  let eDate = document.getElementsByName("endDate")[0];  
 	  
 	  let sendJsonData = [];
-	  sendJsonData.push({csName:title.value,startDate:sDate.value,endDate:eDate.value});
-	 	
+	  let sendJsonData2 = [];
+	 	 
 	  for(i=0; i < count; i++){
 	  	let item = document.getElementsByName("category")[i];
 	  	let grade = document.getElementsByName("addGrade")[i];
@@ -63,15 +63,14 @@
 	  		}else{
 	  			let nameBox = document.getElementById("nameBox"+i);
 	  		}
-		
-	  		sendJsonData.push({itemCode:item.value,itemPercent:grade.value}); 
-	  	
+	  		
+	  		sendJsonData2.push({itemCode:item.value,itemPercent:grade.value}); 
+	  		
 	  }
-	  
-	  
+	  sendJsonData.push({csName:title.value,startDate:sDate.value,endDate:eDate.value,gbList:sendJsonData2});
 	  let clientData = JSON.stringify(sendJsonData);
 	  alert(clientData);
-	  postAjax('member/createLecture',clientData,'test','json');
+	  postAjax('dashboard/createLecture',clientData,'test','json');
   }
   
   function test(jsonData){

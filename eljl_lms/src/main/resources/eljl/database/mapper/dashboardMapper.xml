@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ 
+ <mapper namespace="eljl.database.mapper.dashboardMapper">
+ 
+ <insert id="insClass" parameterType="eljl.factory.bean.SubjectBean">
+ 	INSERT INTO SUB VALUES('20210909001T', '1234','1234567',#{csName},#{startDate},#{endDate},'1')
+ </insert>
+ 
+ <insert id="insScoreStandard" parameterType="eljl.factory.bean.SubjectBean">
+ 	INSERT INTO SS VALUES('20210909001T', '1234','1234567',#{itemCode},'ETCNAME',#{itemPercent})
+ </insert>
+
+ </mapper>

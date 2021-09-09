@@ -23,7 +23,9 @@
 	
 	
 	<context:component-scan base-package="eljl.service.*"></context:component-scan>
+	<context:component-scan base-package="eljl.lms.*"></context:component-scan>
 	<context:component-scan base-package="eljl.factory.*"></context:component-scan>
+	<context:component-scan base-package="eljl.database.*"></context:component-scan>
 	
 	<!-- Gson 등록 -->
 	<beans:bean class="com.google.gson.Gson">
