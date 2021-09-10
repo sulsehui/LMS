@@ -43,85 +43,9 @@
     }
   </style>
   <script type="text/javascript" src="resources/js/master.js"></script>
-  <script type="text/javascript">
-  
-  // 클래스 생성
-  function createClass(){
-	  let title = document.getElementsByName("title")[0];
-	  let sDate = document.getElementsByName("startDate")[0];
-	  let eDate = document.getElementsByName("endDate")[0];  
-	  
-	  let sendJsonData = [];
-	  let sendJsonData2 = [];
-	 	 
-	  for(i=0; i < count; i++){
-	  	let item = document.getElementsByName("category")[i];
-	  	let grade = document.getElementsByName("addGrade")[i];
-	  	let addName = document.getElementById("addName"+i);		
-	  		if(i == 0){
-	  			let nameBox = document.getElementById("nameBox");
-	  		}else{
-	  			let nameBox = document.getElementById("nameBox"+i);
-	  		}
-	  		
-	  		sendJsonData2.push({itemCode:item.value,itemPercent:grade.value}); 
-	  		
-	  }
-	  sendJsonData.push({csName:title.value,startDate:sDate.value,endDate:eDate.value,gbList:sendJsonData2});
-	  let clientData = JSON.stringify(sendJsonData);
-	  alert(clientData);
-	  postAjax('dashboard/createLecture',clientData,'test','json');
-  }
-  
-  function test(jsonData){
-	  alert("끝");
-  }
-  
-  
-  // 값 지우기(닫기)
-  function deleteValue(){
-	  let title = document.getElementsByName("title")[0];
-	  let startDate = document.getElementsByName("startDate")[0];
-	  let endDate = document.getElementsByName("endDate")[0];
-	  
-	  title.value = "";
-	  startDate.value = "";
-	  endDate.value = "";
-	
-	  let class2 = document.getElementById("modal-body"); 
-	  class2.innerHTML = "<p>클래스 타이틀<a onClick='addCategory()'><span class='glyphicon glyphicon-plus' ></span></a></p><div id='box'><select name='category' onChange='addName(this.options[this.selectedIndex].value,')'><option value='T'>과제</option><option value='Q'>퀴즈</option><option value='A'>출결</option><option value='E'>기타</option></select><input type='text' name=''/><div id='addName'></div></div>";
-  }
-  
-  let count = 1;
-  
-  function addCategory() {
-	let div = document.getElementById("modal-body");
-	div.innerHTML += "<div id='Category"+count+"'><select name='category' onChange='addName(this.options[this.selectedIndex].value,"+count+")'> "+"<option value='T'>과제</option>" + "<option value='Q'>퀴즈</option>" + "<option value='A'>출결</option>"+ "<option value='E'>기타</option>"+ "</select>"+ "<input type='text' name='addGrade'/><div id='addName"+count+"'></div><input type='button' value='삭제' onClick='deleteCategory("+count+")'> </div>";
-	count++;
-  }
-  
-  function deleteCategory(number){
-	  let div = document.getElementById("Category"+number);
-  	  div.remove();
-  }
-  
-  function addName(data,number){
-	  if(data == "E"){
-		  let div = document.getElementById("addName"+number);
-		  div.innerHTML = "이름 : <input id='nameBox"+number+"' type='text'/>";
-	  }else{
-		  let test = document.getElementById("addName"+number);
-		  if(test.innerText != ""){
-			  let div = document.getElementById("nameBox"+number);
-			  div.remove();
-			  test.innerText = ""; 
-		  }	  
-	  }
-  }
-  
-  </script>
+  <script type="text/javascript" src="resources/js/main.js"></script>
 </head>
-<body>
+<body onload="getList()">
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -141,7 +65,7 @@
             <ul class="dropdown-menu">
               <li><a data-toggle="modal" data-target="#createClass1"><span class="glyphicon glyphicon-plus" > Class</span></a></li> 
               
-              <li><a href="#"><span class="glyphicon glyphicon-trash"> Delete</span></a></li>                        
+              <li onClick="deleteClassList()"><a data-toggle="modal" data-target="#deleteClass"><span class="glyphicon glyphicon-trash" > Delete</span></a></li>                        
            </ul>
        </li>
         <li><a href="#">Calender</a></li>
@@ -159,7 +83,7 @@
     <div class="col-sm-1 text-left"> </div>
     <div class="col-sm-10 text-left"> 
       <h1>내 클래스 목록</h1>
-      <div class="well well-lg">내 클래스</div>
+      <div id="myClass" class="well well-lg">내 클래스</div>
       <hr>
       <h1>다른 클래스 목록</h1>
       <div class="well well-lg">다른 클래스</div>
@@ -181,6 +105,8 @@
         <div class="modal-body">
           <p>클래스 타이틀</p>
           	<input type="text" name="title">
+           <p>학과 명</p>
+             <input type="text" name="csName">	
            <p>시작 날짜</p>
           	<input type="date" name="startDate">
             <p>종료 날짜</p>
@@ -235,5 +161,43 @@
       
     </div>
   </div>
+  
+ <!-- 삭제 모달창 -->
+  <div class="modal fade" id="deleteClass" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">클래스 삭제 </h4>
+        </div>
+        <div class="modal-body">
+        
+          	<table class="table table-striped">
+		    <thead>
+		      <tr>
+		        <th>삭제할 클래스 목록</th>
+		        <th>분류</th>
+		      </tr>
+		    </thead>
+		    <tbody id="deleteClassBox">
+		
+		    </tbody>
+		    </table>
+            
+            
+        </div>
+        <div class="modal-footer">
+        
+          <button type="button" class="btn btn-default" data-dismiss="modal" onClick="deleteValue()">닫기</button>
+        </div>
+        
+         
+      
+      </div>
+      
+    </div>
+  </div>  
 </body>
 </html>

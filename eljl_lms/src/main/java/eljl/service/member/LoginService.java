@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import eljl.database.mapper.memberMapper;
 import eljl.factory.bean.UserInfoBean;
 import eljl.factory.util.Encryption;
+import eljl.factory.util.ProjectUtils;
 
 
 @Service
@@ -42,6 +43,9 @@ public class LoginService {
 
 	@Autowired
 	JavaMailSenderImpl javaMail;
+	
+	@Autowired
+	ProjectUtils pu;
 	
 	// 선생님 회원가입
 	public ModelAndView joinTeacherCtl(UserInfoBean ub) {
@@ -74,6 +78,11 @@ public class LoginService {
 				String encTePw = session.selectOne("getTePw",ub);
 				if(enc.matches(ub.getMbPw(),encTePw)) {
 					mav.setViewName("main");
+					try {
+						pu.setAttribute("mbId", ub.getMbId());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}else {
 					mav.setViewName("login");
 					mav.addObject("message","아이디나 비밀번호를 확인해주세요");

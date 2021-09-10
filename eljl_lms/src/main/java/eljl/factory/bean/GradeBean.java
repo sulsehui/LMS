@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class GradeBean {
-
 	String mbId;
 	String csCode;
 	String csName;

@@ -7,11 +7,40 @@
  <mapper namespace="eljl.database.mapper.dashboardMapper">
  
  <insert id="insClass" parameterType="eljl.factory.bean.SubjectBean">
- 	INSERT INTO SUB VALUES('20210909001T', '1234','1234567',#{csName},#{startDate},#{endDate},'1')
+ 	INSERT INTO tb_cs VALUES (#{csCode},#{csName})
  </insert>
  
- <insert id="insScoreStandard" parameterType="eljl.factory.bean.SubjectBean">
- 	INSERT INTO SS VALUES('20210909001T', '1234','1234567',#{itemCode},'ETCNAME',#{itemPercent})
+ <insert id="insSubject" parameterType="eljl.factory.bean.SubjectBean">
+ 	INSERT INTO SUB VALUES(#{mbId}, #{csCode},#{opCode},#{csName},#{startDate},#{endDate},'1')
+ </insert>
+ 
+ <insert id="insScoreStandard" parameterType="java.util.List">
+ 	<foreach item="item" collection="list" separator=" " open="INSERT ALL " close="SELECT * FROM DUAL">
+ 	INTO SS VALUES(#{item.mbId},#{item.csCode},#{item.opCode},#{item.itemCode},'ETCNAME',#{item.itemPercent})
+ 	</foreach>
  </insert>
 
+ <select id="getLectureList" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.SubjectBean">
+ 	SELECT SUB_TCODE AS "mbId",
+                SUB_CSCODE AS "csCode",
+                SUB_OPCODE AS "opCode",
+                SUB_OPNAME AS "opName",
+                SUB_STARTDATE AS "startDate",
+                SUB_ENDDATE AS "endDate"
+ 	from SUB where sub_tcode = #{mbId}
+ </select>
+ 
+ <select id="getcsName" parameterType="eljl.factory.bean.SubjectBean" resultType="string">
+	select cs_code as "csCode" from tb_cs where cs_category = #{csName}
+ </select>
+ 
+ <select id="getcsCode" parameterType="eljl.factory.bean.SubjectBean" resultType="string">
+ 	select max(cs_code) as "csCode" from tb_cs
+ </select>
+ 
+ <select id="getopCode" parameterType="eljl.factory.bean.SubjectBean" resultType="string">
+ 	select max(sub_opcode) as "opCode" from sub 
+ </select>
+ 
+ 
  </mapper>
