@@ -7,7 +7,7 @@
  <mapper namespace="eljl.database.mapper.memberMapper">
  
  	<insert id="joinTe" parameterType="eljl.factory.bean.UserInfoBean" >
- 		insert into tb_t values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'W',#{stickerPath},'1234')
+ 		insert into tb_t values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'W',#{stickerPath},ROUND(DBMS_RANDOM.VALUE(111111, 999999),0))
  	</insert>
  	
  	<insert id="joinStu" parameterType="eljl.factory.bean.UserInfoBean" >
@@ -35,7 +35,7 @@
  	</select>
  	
  	<select id="getStuPw" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
- 		select STU_PASSWORD as "mbPw" from stu where STU_CODE = #{mbId}
+ 		select STU_PASSWORD as "mbPw" from STU where STU_CODE = #{mbId}
  	</select>
  	
  	<select id="selectTeMail" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
@@ -46,8 +46,16 @@
  		select STU_MAIL from stu where STU_CODE = #{mbId}
  	</select>
  	
- 	<select id="getAuth" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
- 		select count(*) from tb_t where t_code = #{mbId} and t_auth = #{mbAuth}
+ 	<select id="getAuth" parameterType="string" resultType="string">
+ 		select T_AUTH as "mbAuth" from TB_T where T_CODE = #{mbId} <!-- and t_auth = #{mbAuth} -->
  	</select>
+ 	
+<!--  	<update id="updateNewPw">
+ 		update tb_t set T_PASSWORD = #{mbPw} where T_CODE = #{mbId} 
+ 	</update> -->
+ 	
+ 	<update id="updateNewAuth" parameterType="eljl.factory.bean.UserInfoBean">
+ 		update tb_t set T_AUTH = ROUND(DBMS_RANDOM.VALUE(111111, 999999),0), T_PASSWORD = #{mbPw} where T_CODE = #{mbId}
+ 	</update>
  	
  </mapper>

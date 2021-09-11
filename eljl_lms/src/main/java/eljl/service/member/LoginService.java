@@ -13,6 +13,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.jsp.jstl.sql.Result;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,8 +169,10 @@ public class LoginService {
 	//비밀번호 변경 이메일 인증(교사, 학생)
 	public Map<String,String> pwChangeMail(UserInfoBean ub) {
 			Map<String, String> map = new HashMap<String, String>();
+			
+			
 			String subject = "[eljl_LMS] 비밀번호를 변경해주세요!";
-			String contents = "인증해주세요";
+			String contents = this.getAccessPw(ub.getMbId())+"로 인증해주세요";
 			String from = "mywptjd0127@naver.com";
 			
 			String to = ub.getMbMail();
@@ -190,16 +193,40 @@ public class LoginService {
 			
 			return map;
 	}
-
+	private String getAccessPw(String mbId) {
+		return session.selectOne("getAuth", mbId);
+	}
+	// 인증키 검사
 	public Map<String,String> sendAuth(UserInfoBean ub) {
 		 Map<String, String> map = new HashMap<String, String>();
-		 System.out.println(ub.getMbId()+" "+ub.getMbAuth());
-		 if(this.convertData(session.selectOne("getAuth", ub))) {
+		 if(ub.getMbAuth().equals(this.getAccessPw(ub.getMbId()))) {
 			 map.put("message", "true");
 		 }else {
 			 map.put("message", "false");
 		 }
 		 return map;
+	}
+
+	// 새 비밀번호 변경 update
+	public ModelAndView sendNewPW(UserInfoBean ub) {
+		ModelAndView mav = new ModelAndView();
+		String result = "비밀번호가 변경 되었습니다.";
+		mav.setViewName("login");
+		try {
+			ub.setMbPw(enc.encode(ub.getMbPw()));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(!updatePw(ub)) {
+			result = "비밀번호 변경을 실패하였습니다.";
+		}
+			
+		mav.addObject("message",result);
+		return mav;
+	}
+	private boolean updatePw(UserInfoBean ub) {
+		return this.convertData(session.update("updateNewAuth", ub));
 	}
 	
 	

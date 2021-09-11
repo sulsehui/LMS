@@ -116,6 +116,12 @@ public class HomeController {
 		return ls.sendAuth(ub);
 	}
 	
+	//새 비밀번호 전송
+	@PostMapping("/sendNewPW")
+	public ModelAndView sendNewPW(@ModelAttribute UserInfoBean ub) {
+		return ls.sendNewPW(ub);
+	}
+	
 	
 	// 캘린더 From 양식
 	@RequestMapping(value = "/calendar", method = RequestMethod.GET)

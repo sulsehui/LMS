@@ -8,7 +8,11 @@
 </head>
 <script type="text/javascript" src="resources/js/master.js"></script>
 <script type="text/javascript">
-
+const pwdComp1 = /[a-z]/g;
+const pwdComp2 = /[0-9]/g;
+const pwdComp3 = /[!@#$%^&*]/g;
+const pwdComp4 = /[A-Z]/g;
+	
 	// 아이디 인증
 	function submit() {
 		let id = document.getElementsByName("mbId")[0];
@@ -21,7 +25,7 @@
 			result = mbType[1].value;
 		}
 		
-		hiddenBox.innerHTML = "<input='hidden' name='mbId' value='"+id.value+"' />";
+		hiddenBox.innerHTML = "<input type='hidden' name='mbId' value='"+id.value+"' />";
 		
 		postAjax("usAuthen", "mbId=" + id.value + "&" + "mbType=" + result,
 				"selectMail", "form");
@@ -36,7 +40,8 @@
 	// 메일 전송하기
 	function sendMail(){
 		let mbMail = document.getElementsByName("mbMail")[0];
-		postAjax("pwChangeMail","mbMail="+mbMail.value,"mailAuth","form");
+		let mbId = document.getElementsByName("mbId")[0];
+		postAjax("pwChangeMail","mbMail="+mbMail.value +"&"+"mbId="+mbId.value,"mailAuth","form");
 	}
 	
 	// 인증키 입력 양식
@@ -56,12 +61,60 @@
 	// 인증키 인증 후 클라이언트
 	function pwChangeForm(message){
 		let authBox = document.getElementById("AuthBox");
-		alert(JSON.parse(JSON.stringify(message)).message);
 		if((JSON.parse(JSON.stringify(message)).message) == "true"){
-			authBox.innerHTML = "<div>성공입니다</div>";
+			authBox.innerHTML = "<p>새 비밀번호 입력</p><div><input type='password' name='mbPw' onblur='pwCheck()'/> </div>";
+			authBox.innerHTML += "<div id='pwCheck'></div>";
+			authBox.innerHTML += "<p>새 비밀번호 재입력</p><div><input type='password' name='rembPw' onblur='repwCheck()'/>";
+			authBox.innerHTML += "<div id='repwCheck'></div>";
+			authBox.innerHTML += "<input type='button' value='변경하기' onClick='sendNewPw()' />";
 		}else{
-			authBox.innerHTML = "<div>실패입니다 ㅠㅠ</div>";
+			alert("인증키를 잘못 입력하였습니다");
+			authBox.innerHTML = "<input type='text' name='auth'><input type='button' value='인증하기' onClick='sendAuth()'/>";
 		}
+	}
+	
+	
+	//비밀번호 체크 (소문자, 특수문자, 숫자 포함)
+	function pwCheck() {
+		let pw = document.getElementsByName("mbPw")[0];
+		let pwCheck = document.getElementById("pwCheck");
+		let count = 0;
+		if (pw.value.length > 5 && pw.value.length < 13) {
+			count += pwdComp1.test(pw.value) ? 1 : 0;
+			count += pwdComp2.test(pw.value) ? 1 : 0;
+			count += pwdComp3.test(pw.value) ? 1 : 0;
+			count == 3 ? pwCheck.innerText = "사용 가능한 비밀번호입니다."
+					: pwCheck.innerText = "6-12자 소문자,특수문자,숫자를 사용하세요.";
+		} else {
+			pwCheck.innerText = "6-12자 소문자,특수문자,숫자를 사용하세요.";
+		}
+	}
+
+	//비밀번호 재확인
+	function repwCheck() {
+		let pw = document.getElementsByName("mbPw")[0];
+		let rePw = document.getElementsByName("rembPw")[0];
+		let repwCheck = document.getElementById("repwCheck");
+		if(pw.value != rePw.value){
+			repwCheck.innerText = "비밀번호가 일치하지 않습니다.";
+		}else{
+			repwCheck.innerText = "비밀번호가 일치합니다.";
+		}
+	}
+	
+	// 새 비밀번호 전송
+	function sendNewPw(){
+		let pw = document.getElementsByName("mbPw")[0];
+		let mbId = document.getElementsByName("mbId")[0];
+		
+		let f = document.createElement("form");
+		f.action = "sendNewPW";
+		f.method = "post";
+		
+		document.body.appendChild(f);
+		f.appendChild(pw);
+		f.appendChild(mbId);
+		f.submit();
 	}
 	
 </script>
