@@ -38,11 +38,13 @@
 	  let title = document.getElementsByName("title")[0];
 	  let startDate = document.getElementsByName("startDate")[0];
 	  let endDate = document.getElementsByName("endDate")[0];
-	  
+	  let csName = document.getElementsByName("csName")[0];	  
+
 	  title.value = "";
 	  startDate.value = "";
 	  endDate.value = "";
-	
+      csName.value = "";	  
+
 	  let class2 = document.getElementById("modal-body"); 
 	  class2.innerHTML = "<p>클래스 타이틀<a onClick='addCategory()'><span class='glyphicon glyphicon-plus' ></span></a></p><div id='box'><select name='category' onChange='addName(this.options[this.selectedIndex].value,')'><option value='T'>과제</option><option value='Q'>퀴즈</option><option value='A'>출결</option><option value='E'>기타</option></select><input type='text' name=''/><div id='addName'></div></div>";
   }
@@ -89,7 +91,13 @@
   //클래스 리스트 가져와서 출력
   function getListView(jsonData){
 	  let myClass = document.getElementById("myClass");
-	  myClass.innerHTML = "<div>"+jsonData[0].opName +" "+ jsonData[0].startDate +" "+ jsonData[0].endDate+"</div>" ;
+	  myClass.innerHTML = "";
+	  for(i=0; i < jsonData.length; i++){
+		if(jsonData[i].opName != null){
+			myClass.innerHTML += "<div><a href='/streamForm'>"+jsonData[i].opName +" "+ jsonData[i].startDate +" "+ jsonData[i].endDate+"</a></div>" ;
+		}
+	}
+	  
   }
   
   // 삭제할 클래스 리스트 가져오기
@@ -107,9 +115,12 @@
 	   deleteBox.innerHTML = "";
 	for(i=0; i < jsonData.length; i++){
 		if(jsonData[0].opName != null){
-			deleteBox.innerHTML += "<tr><td>"+jsonData[i].opName+"</td><td><button type='button' class='btn btn-default'  onClick='deleteClass()'>삭제</button></td></tr>";
+			deleteBox.innerHTML += "<tr><td>"+jsonData[i].opName+"</td><input type='hidden' name='deleteClass' value='"+jsonData[i].opCode+"'/><td><button type='button' class='btn btn-default'  onClick='deleteClass("+i+")'>삭제</button></td></tr>";
 		}  
 	}
 	
 }
-  	
+  	function deleteClass(number){
+	let deleteClass = document.getElementsByName("deleteClass")[number];
+	postAjax('deleteClass',"opCode="+deleteClass.value,'getdeleteClassList','form');
+}

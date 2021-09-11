@@ -3,6 +3,7 @@ package eljl.service.controller;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,9 +104,23 @@ public class HomeController {
 	
 	//비밀번호 변경 이메일 전송
 	@PostMapping("/pwChangeMail")
-	public void pwChangeMail(@ModelAttribute UserInfoBean ub) {
-		ls.pwChangeMail(ub);
+	@ResponseBody
+	public Map<String,String> pwChangeMail(@ModelAttribute UserInfoBean ub) {
+		return ls.pwChangeMail(ub);
 	}
 	
+	//인증키 서버에 전송
+	@PostMapping("/sendAuth")
+	@ResponseBody
+	public Map<String,String> sendAuth(@ModelAttribute UserInfoBean ub) {
+		return ls.sendAuth(ub);
+	}
+	
+	
+	// 캘린더 From 양식
+	@RequestMapping(value = "/calendar", method = RequestMethod.GET)
+	public String calendarForm() {
+		return "calendar";
+	}
 }
 

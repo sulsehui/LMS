@@ -42,5 +42,12 @@
  	select max(sub_opcode) as "opCode" from sub 
  </select>
  
+ <delete id="deleteClass_SS" parameterType="eljl.factory.bean.SubjectBean">
+ 	delete from ss where SS_SJ_OPCODE = #{opCode}
+ </delete>
+ 
+ <delete id="deleteClass_SUB" parameterType="eljl.factory.bean.SubjectBean">
+ 	delete from sub where SUB_OPCODE = #{opCode}
+ </delete>
  
  </mapper>

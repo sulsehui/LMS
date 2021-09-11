@@ -59,15 +59,18 @@ public class MainService {
 				for(int i=0; i < 4-result.length(); i++) {
 					number += "0"; // 00
 				}
-				number += result;			
-			}else {
+				number += result;	
+				sb.setCsCode(number);
+				
+			}else { // 중복일 때
 				sb.setCsCode(session.selectOne("getcsName",sb));
 			}
 		}
-		sb.setCsCode(number);
+		
 		System.out.println(sb.getCsCode());
 
 		// opCode
+		number = "";
 		if(session.selectOne("getopCode") == null) {
 			number = "0000001";
 		}else {
@@ -78,8 +81,9 @@ public class MainService {
 			number += result;
 		}
 		sb.setOpCode(number);
+		System.out.println(sb.getOpCode());
 
-		if(this.convertData(session.insert("insClass", sb))) {
+		if(check = this.convertData(session.insert("insClass", sb))) {
 			if(check = this.convertData(session.insert("insSubject",sb))){
 				for(int i=0; i<sb.getGbList().size(); i++) {
 					sb.getGbList().get(i).setItemCode(sb.getGbList().get(i).getItemCode() +"0" + i);
@@ -95,6 +99,7 @@ public class MainService {
 				}
 			}
 		}
+		
 		return null;
 	}
 
@@ -117,5 +122,16 @@ public class MainService {
 		list = session.selectList("getLectureList", sb);
 		sbList.addAll(list);
 		return sbList;
+	}
+
+	// 클래스 삭제하기
+	public List<SubjectBean> deleteClassCtl(SubjectBean sb) {
+		if(this.convertData(session.delete("deleteClass_SS",sb))) {
+			System.out.println("ss삭제");
+			if(this.convertData(session.delete("deleteClass_SUB", sb))) {
+				System.out.println("sub삭제");
+			}
+		}
+		return getMyLectureListCtl(sb);
 	}
 }

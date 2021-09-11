@@ -7,7 +7,7 @@
  <mapper namespace="eljl.database.mapper.memberMapper">
  
  	<insert id="joinTe" parameterType="eljl.factory.bean.UserInfoBean" >
- 		insert into tb_t values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'W','성공')
+ 		insert into tb_t values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'W',#{stickerPath},'1234')
  	</insert>
  	
  	<insert id="joinStu" parameterType="eljl.factory.bean.UserInfoBean" >
@@ -45,4 +45,9 @@
  	<select id="selectStuMail" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
  		select STU_MAIL from stu where STU_CODE = #{mbId}
  	</select>
+ 	
+ 	<select id="getAuth" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from tb_t where t_code = #{mbId} and t_auth = #{mbAuth}
+ 	</select>
+ 	
  </mapper>

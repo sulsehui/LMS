@@ -4,7 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -58,7 +60,8 @@ public class LoginService {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		ub.setStickerPath(pu.savingFile(ub.getMbFile()));
+		
 		if(convertData(session.insert("joinTe",ub))) {
 			mav.setViewName("login");
 		}else {
@@ -163,8 +166,8 @@ public class LoginService {
 	}
 
 	//비밀번호 변경 이메일 인증(교사, 학생)
-	public void pwChangeMail(UserInfoBean ub) {
-			//mav = new ModelAndView();
+	public Map<String,String> pwChangeMail(UserInfoBean ub) {
+			Map<String, String> map = new HashMap<String, String>();
 			String subject = "[eljl_LMS] 비밀번호를 변경해주세요!";
 			String contents = "인증해주세요";
 			String from = "mywptjd0127@naver.com";
@@ -180,9 +183,23 @@ public class LoginService {
 				helper.setSubject(subject);
 				helper.setText(contents,true);
 				javaMail.send(mail);
+				map.put("message", ub.getMbMail()+"로 이메일이 전송 되었습니다.");
 			} catch (MessagingException e) {
 				e.printStackTrace();
-			}					
+			}
+			
+			return map;
+	}
+
+	public Map<String,String> sendAuth(UserInfoBean ub) {
+		 Map<String, String> map = new HashMap<String, String>();
+		 System.out.println(ub.getMbId()+" "+ub.getMbAuth());
+		 if(this.convertData(session.selectOne("getAuth", ub))) {
+			 map.put("message", "true");
+		 }else {
+			 map.put("message", "false");
+		 }
+		 return map;
 	}
 	
 	

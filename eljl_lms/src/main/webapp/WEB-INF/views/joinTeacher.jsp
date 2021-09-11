@@ -78,7 +78,7 @@
 		let mail1 = document.getElementsByName("mail1")[0];
 		let mail2 = document.getElementsByName("mail2")[0];
 		let mbMail = makeInput('hidden','mbMail',mail1.value+mail2.value);
-		//let file = document.getElementsByName("mbFile")[0];
+		let file = document.getElementsByName("mbFile")[0];
 		
 		if(id.value == ""){
 			id.focus();
@@ -94,6 +94,7 @@
 			let f = document.createElement("form");
 			f.action="joinTeacher";
 			f.method="post";
+			f.enctype="multipart/form-data";
 			
 			document.body.appendChild(f);
 			f.appendChild(id);
@@ -101,14 +102,10 @@
 			f.appendChild(name);
 			f.appendChild(phone);
 			f.appendChild(mbMail);
-			//f.appendChild(file);
+			f.appendChild(file);
 			
 			f.submit();
-		}
-		
-		// 파일하자
-		
-			
+		}			
 	}
 	
 </script>
@@ -137,7 +134,7 @@
 	<option value="@google.com">google.com</option>
 	</select>
 	<br>
-	<input type="file" />
+	<input type="file" name="mbFile"/>
 	<br>
 	<input type="button" onClick="submit()" value="전송" />
 	<br>

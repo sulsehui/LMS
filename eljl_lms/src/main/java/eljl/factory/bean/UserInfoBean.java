@@ -1,5 +1,7 @@
 package eljl.factory.bean;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -11,5 +13,8 @@ public class UserInfoBean {
 	String mbPhone;
 	String status;
 	String mbType;
+	String mbAuth;
 	
+    String stickerPath;
+	MultipartFile mbFile;
 }
