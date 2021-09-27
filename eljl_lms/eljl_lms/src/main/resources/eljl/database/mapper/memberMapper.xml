@@ -11,7 +11,7 @@
  	</insert>
  	
  	<insert id="joinStu" parameterType="eljl.factory.bean.UserInfoBean" >
- 		insert into stu values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'O' ,ROUND(DBMS_RANDOM.VALUE(111111, 999999),0))
+ 		insert into stu values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'O' ,ROUND(DBMS_RANDOM.VALUE(111111, 999999),0), NULL)
  	</insert>
  	
  	<select id="isTeId" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">

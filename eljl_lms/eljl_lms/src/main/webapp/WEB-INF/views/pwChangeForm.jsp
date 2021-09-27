@@ -122,13 +122,60 @@ const pwdComp4 = /[A-Z]/g;
 		f.submit();
 	}
 	
+	//관리자 비밀번호 변경 폼
+	function adPwChange(mbId){
+		
+		if(mbId != null){
+			
+		let authBox = document.getElementById("AuthBox");
+		
+		authBox.innerHTML = "<p>현재 비밀번호 입력</p><div><input type = 'password' name = 'nowPw' onblur = 'sendNowPw()' /></div>";
+		authBox.innerHTML += "<div id='nowPwCheck'></div>";
+		authBox.innerHTML += "<p>변경할 비밀번호 입력</p><div><input type = 'password' name = 'pwChange' onblur = 'pwChangeCheck()' /></div>";
+		authBox.innerHTML += "<div id='pwChangeCheck'></div>";
+		authBox.innerHTML += "<input type='button' value='변경하기' onClick='sendNewPw()' />";
+			
+		
+		}
+		
+	}
+	
+	//현재 비밀번호 가져오기
+	function sendNowPw(){
+	
+		let sendJsonData = [];
+		sendJsonData.push({mbPw:""});
+		let clientData = JSON.stringify(sendJsonData);
+		
+		postAjax('admin/getNowPw', clientData, 'nowPwCheck()', 'json');
+		
+	
+	}
+	
+	//현재 비밀번호 확인
+	
+	function nowPwCheck(){
+		
+		let nowPw = document.getElementsByName("nowPw")[0];
+		let nowPwCheck = document.getElementById("nowPwCheck");
+		
+
+		if(nowPw.value == mbPw){
+			nowPwCheck.innerText = "현재 비밀번호가 일치합니다.";
+		}else{
+			nowPwCheck.innerText = "비밀번호가 일치하지 않습니다. 다시 작성해주세요.";
+		}
+	}
+	
+	
 </script>
 
-<body>
-	비밀번호 변경을 위한 인증 페이지입니다
+<body onLoad = "adPwChange('${mbId }')">
+	
 	<br>
-
+	
 	<div id="AuthBox">
+		비밀번호 변경을 위한 인증 페이지입니다
 		<input type="radio" value="T" name="mbType" checked="checked">선생님
 		<input type="radio" value="S" name="mbType">학생 <br> 아이디
 		<input type="text" name="mbId" /> <br>

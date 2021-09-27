@@ -82,30 +82,46 @@ public class LoginService {
 
 		// T
 		if(hb.getMbType().equals("T")){
-			if(convertData(session.selectOne("isTeId",hb))) {
-				String encTePw = session.selectOne("getTePw",hb);
-				if(enc.matches(hb.getMbPw(),encTePw)) {
-					if(check = this.insTeHistory(hb)) {
-						mav.addObject("publicIp", hb.getPublicIp());
-						mav.addObject("privateIp", hb.getPrivateIp());
-						mav.addObject("mbType",hb.getMbType());
-						mav.setViewName("main");
-						try {
-							pu.setAttribute("mbId", hb.getMbId());
-						} catch (Exception e) {
-							e.printStackTrace();
+			if(this.convertData(session.selectOne("adminCheck", hb))) {
+				
+					mav.setViewName("admin");
+					mav.addObject("mbId", hb.getMbId());
+				
+					
+					try {
+						pu.setAttribute("mbId", hb.getMbId());
+					
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				
+
+
+			}else {
+				if(convertData(session.selectOne("isTeId",hb))) {
+					String encTePw = session.selectOne("getTePw",hb);
+					if(enc.matches(hb.getMbPw(),encTePw)) {
+						if(check = this.insTeHistory(hb)) {
+							mav.addObject("publicIp", hb.getPublicIp());
+							mav.addObject("privateIp", hb.getPrivateIp());
+							mav.addObject("mbType",hb.getMbType());
+							mav.setViewName("attendance");
+							try {
+								pu.setAttribute("mbId", hb.getMbId());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
+					}else {
+						mav.setViewName("login");
+						mav.addObject("message","아이디나 비밀번호를 확인해주세요");
 					}
 				}else {
 					mav.setViewName("login");
 					mav.addObject("message","아이디나 비밀번호를 확인해주세요");
 				}
-			}else {
-				mav.setViewName("login");
-				mav.addObject("message","아이디나 비밀번호를 확인해주세요");
 			}
-		
-		// S
+			// S
 		}else if(hb.getMbType().equals("S")){
 			if(convertData(session.selectOne("isStuId",hb))) {
 				String encTePw = session.selectOne("getStuPw",hb);
@@ -114,7 +130,7 @@ public class LoginService {
 						mav.addObject("publicIp", hb.getPublicIp());
 						mav.addObject("privateIp", hb.getPrivateIp());
 						mav.addObject("mbType",hb.getMbType());
-						mav.setViewName("main");
+						mav.setViewName("attendance");
 						try {
 							pu.setAttribute("mbId", hb.getMbId());
 						} catch (Exception e) {
@@ -138,12 +154,12 @@ public class LoginService {
 	public boolean convertData(int data) {
 		return (data > 0)? true:false;
 	}
-	
+
 	//history(교사) 
 	boolean insTeHistory(HistoryBean hb) {
 		return convertData(session.insert("insTeHistory", hb));
 	}
-	
+
 	//history(학생) 
 	boolean insStuHistory(HistoryBean hb) {
 		return convertData(session.insert("insStuHistory", hb));
@@ -282,12 +298,12 @@ public class LoginService {
 		return this.convertData(session.update("updateStuNewAuth", ub));
 	}
 
-	
+
 	// 로그아웃
 	public ModelAndView LogOutCtl(HistoryBean hb) {
 		boolean check = false;
 		mav = new ModelAndView();
-	
+
 		if(hb.getMbType().equals("T")) {
 			try {
 				if(pu.getAttribute("mbId") != null) {
