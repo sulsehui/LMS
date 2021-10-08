@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="eljl.database.mapper.adminMapper">
+ 
+ <select id = "allMemberList" parameterType="eljl.factory.bean.UserInfoBean" resultType="eljl.factory.bean.UserInfoBean">
+		SELECT T_CODE AS "mbId",
+       T_NAME AS "mbName",
+       T_STATUS AS "status",
+       T_FILE AS "stickerPath",
+       'T' AS "mbType",
+       'fileName' as "fileName"
+FROM TB_T
+WHERE T_STATUS = 'W' 
+UNION ALL
+SELECT T_CODE AS "mbId",
+       T_NAME AS "mbName",
+       T_STATUS AS "status",
+       T_FILE AS "stickerPath",
+       'T' AS "mbType", 
+       'fileName' as "fileName"
+FROM TB_T
+WHERE T_STATUS = 'G' OR T_STATUS = 'N'
+UNION ALL
+SELECT STU_CODE AS "mbId",
+       STU_NAME AS "mbName",
+       STU_STATUS AS "status",
+       STU_FILE AS "stickerPath",
+       'S' AS "mbType",
+       'fileName' as "fileName" 
+FROM STU
+
+ </select>
+
+ <update id = "teacherAuth" parameterType="eljl.factory.bean.UserInfoBean">
+ UPDATE TB_T SET T_STATUS = 'G' WHERE T_CODE = #{mbId}
+ </update>
+
+  <update id = "tePermission" parameterType="eljl.factory.bean.UserInfoBean">
+ UPDATE TB_T SET T_STATUS = #{status} WHERE T_CODE = #{mbId}
+ </update>
+
+ <update id = "stuPermission" parameterType="eljl.factory.bean.UserInfoBean">
+ UPDATE STU SET STU_STATUS = #{status} WHERE STU_CODE = #{mbId}
+ </update>
+
+ <select id = "adminCheck" parameterType="eljl.factory.bean.HistoryBean" resultType="int">
+ 	SELECT COUNT(*) FROM TB_ADMIN WHERE AM_CODE = #{mbId}
+ </select>
+ 
+ <select id = "nowPw" parameterType="eljl.factory.bean.HistoryBean" resultType="string">
+ 	SELECT AM_ACCESS AS "mbPw" FROM TB_ADMIN WHERE AM_CODE = #{mbId}
+ </select>
+ 
+ 
+ </mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ 
+ <mapper namespace="eljl.database.mapper.dashboardMapper">
+ 
+ <insert id="insClass" parameterType="eljl.factory.bean.SubjectBean">
+ 	INSERT INTO tb_cs VALUES (#{csCode},#{csName})
+ </insert>
+ 
+ <select id="selectClass" parameterType="eljl.factory.bean.SubjectBean" resultType="int">
+ 	select count(*) from tb_cs where CS_CATEGORY = #{csName} 
+ </select>
+ 
+ <insert id="insSubject" parameterType="eljl.factory.bean.SubjectBean">
+ 	INSERT INTO SUB VALUES(#{mbId}, #{csCode},#{opCode},#{opName},#{startDate},#{endDate},'1')
+ </insert>
+ 
+ <insert id="insScoreStandard" parameterType="java.util.List">
+ 	<foreach item="item" collection="list" separator=" " open="INSERT ALL " close="SELECT * FROM DUAL">
+ 	INTO SS VALUES(#{item.mbId},#{item.csCode},#{item.opCode},#{item.itemCode},#{item.itemName},#{item.itemPercent})
+ 	</foreach>
+ </insert>
+
+ <select id="getTeLectureList" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.StuManageBean">
+ 	SELECT	SUB_OPNAME AS "opName",
+       SUB_OPCODE AS "opCode",
+       SUB_CSCODE AS "csCode",
+       SUB_TCODE AS "teId",
+       T_NAME AS "teName",
+       SUB_STARTDATE AS "startDate",
+       SUB_ENDDATE AS "endDate"
+ 	from SUB  inner join tb_teacher on SUB_TCODE = T_CODE
+ 	where sub_tcode = #{mbId}
+ </select>
+ 
+ <select id="getStuLectureList" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.StuManageBean">
+ 	SELECT SUB_OPNAME AS "opName",
+       SUB_OPCODE AS "opCode",
+       SUB_CSCODE AS "csCode",
+       SUB_TCODE AS "teId",
+       T_NAME AS "teName",
+       SUB_STARTDATE AS "startDate",
+       SUB_ENDDATE AS "endDate"
+	FROM TB_SUBJECT inner join tb_teacher on SUB_TCODE = T_CODE
+	WHERE  SUB_OPCODE IN (SELECT rl_sub_opcode FROM RL WHERE RL_STUCODE = #{mbId})
+
+ </select>
+ 
+ <select id="getcsName" parameterType="eljl.factory.bean.SubjectBean" resultType="string">
+	select cs_code as "csCode" from tb_cs where cs_category = #{csName}
+ </select>
+ 
+ <select id="getcsCode" parameterType="eljl.factory.bean.SubjectBean" resultType="string">
+ 	select max(cs_code) as "csCode" from tb_cs
+ </select>
+ 
+ <select id="getopCode" parameterType="eljl.factory.bean.SubjectBean" resultType="string">
+ 	select max(sub_opcode) as "opCode" from sub 
+ </select>
+ 
+ <delete id="deleteClass_SS" parameterType="eljl.factory.bean.SubjectBean">
+ 	delete from ss where SS_SJ_OPCODE = #{opCode}
+ </delete>
+ 
+ <delete id="deleteClass_SUB" parameterType="eljl.factory.bean.SubjectBean">
+ 	delete from sub where SUB_OPCODE = #{opCode}
+ </delete>
+ 
+ <select id = "getTeOtherClassList" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.StuManageBean">
+ 	SELECT SUB_OPNAME AS "opName",
+ 		   SUB_OPCODE AS "opCode",
+       	   SUB_CSCODE AS "csCode",
+       	   T_NAME AS "teName",
+           SUB_TCODE AS "teId",
+           SUB_STARTDATE AS "startDate",
+       	   SUB_ENDDATE AS "endDate"
+ 	FROM TB_SUBJECT inner join tb_teacher on SUB_TCODE = T_CODE
+ 	WHERE  SUB_TCODE != #{mbId}
+ </select>
+ 
+ <select id = "getStuOtherClassList" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.StuManageBean">
+ 	SELECT SUB_OPNAME AS "opName",
+ 		   SUB_OPCODE AS "opCode",
+       	   SUB_CSCODE AS "csCode",
+       	   T_NAME AS "teName",
+           SUB_TCODE AS "teId",
+           SUB_STARTDATE AS "startDate",
+       	   SUB_ENDDATE AS "endDate"
+ 	FROM TB_SUBJECT inner join tb_teacher on SUB_TCODE = T_CODE
+ 	WHERE SUB_OPCODE NOT IN (SELECT rl_sub_opcode FROM RL WHERE RL_STUCODE = #{mbId})
+ </select>
+ 
+ <insert id = "insAccessClass" parameterType="eljl.factory.bean.StuManageBean">
+ 	INSERT INTO RL VALUES (#{teId}, #{csCode}, #{opCode}, #{stuId}, 'Y')
+ </insert>
+ 
+ <delete id = "cancelClass" parameterType="eljl.factory.bean.StuManageBean">
+ 	delete from rl where RL_SUB_TCODE = #{teId} AND RL_SUB_CSCODE = #{csCode} AND RL_SUB_OPCODE = #{opCode} AND RL_STUCODE = #{stuId}
+ </delete>
+ 
+ <select id = "getStuScheduleList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.StuManageBean">
+ 	 select RL_SUB_TCODE as "teId",
+                RL_SUB_CSCODE as "csCode",
+                RL_SUB_OPCODE as "opCode"
+    from rl
+    where RL_STUCODE = #{stuId}
+ </select>
+ 
+ <select id = "getTeScheduleList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.StuManageBean">
+ 	 select SUB_TCODE as "teId",
+                SUB_CSCODE as "csCode",
+                SUB_OPCODE as "opCode"
+    from sub
+    where sub_tcode = #{stuId}
+ </select>
+ 
+ <select id = "getScheduleTask" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.CalendarBean" >
+ 	select  TK_TITLE as "title",
+ 			TO_CHAR(TK_STARTDATE,'YYYY-MM-DD') as "start",
+             TO_CHAR(TK_ENDDATE,'YYYY-MM-DD') as "end",
+             '#84B1ED' as "backgroundColor"
+	from TB_TASK 
+	where TK_TCODE = #{teId} and TK_CSCODE = #{csCode} and TK_OPCODE = #{opCode}
+ </select>
+ 
+ <select id = "getScheduleQuiz" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.CalendarBean" >
+ 	select  QZ_TITLE as "title",
+ 			TO_CHAR(QZ_STARTDATE,'YYYY-MM-DD') as "start",
+            TO_CHAR(QZ_ENDDATE,'YYYY-MM-DD') as "end",
+            '#FFC9F9' as "backgroundColor"
+            from TB_QUIZ 
+	where QZ_TCODE = #{teId} and QZ_CSCODE = #{csCode} and QZ_OPCODE = #{opCode}
+ </select>
+ 
+ <select id = "getScheduleETC" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.CalendarBean" >
+ 	 select  ETC_TITLE as "title",
+ 			TO_CHAR(ETC_STARTDATE,'YYYY-MM-DD') as "start",
+            TO_CHAR(ETC_ENDDATE,'YYYY-MM-DD') as "end",
+            '#EE7785' as "backgroundColor"
+            from TB_ETC
+	where ETC_TCODE = #{teId} and ETC_CSCODE = #{csCode} and ETC_OPCODE = #{opCode}
+ </select>
+ 
+ </mapper>

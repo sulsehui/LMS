@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="eljl.database.mapper.attendMapper">
+ 
+ <select id = "getStuList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.StuManageBean">
+	SELECT RL_SUB_TCODE AS "teId",
+       RL_SUB_CSCODE AS "csCode",
+       RL_SUB_OPCODE AS "opCode",
+       RL_STUCODE AS "stuId",
+       STU_NAME AS "stuName"
+		FROM RL INNER JOIN STU ON RL_STUCODE = STU_CODE
+		WHERE RL_SUB_TCODE = #{teId} AND RL_SUB_CSCODE = #{csCode} AND RL_SUB_OPCODE= #{opCode}
+	</select>
+	
+  <select id = "getAllAttendList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.StuManageBean">
+ 	 SELECT SI_RL_SUB_TCODE AS "teId",
+       SI_RL_SUB_CSCODE AS "csCode",
+       SI_RL_SUB_OPCODE AS "opCode",
+       SI_RL_STUCODE AS "stuId",
+       STU_NAME AS "stuName",
+       SI_DATE AS "attDate",
+       SI_STATUS AS "status"
+		FROM SI INNER JOIN STU ON SI_RL_STUCODE = STU_CODE
+		WHERE SI_RL_SUB_TCODE = #{teId} AND SI_RL_SUB_CSCODE = #{csCode} AND SI_RL_SUB_OPCODE= #{opCode} and TO_CHAR(si_date,'YYYYMMDD') > TO_CHAR(sysdate-7,'YYYYMMDD') ORDER BY STU_NAME
+  </select>
+  
+  <insert id = "sendAttendCheck"  parameterType="eljl.factory.bean.StuManageBean">
+  	INSERT INTO SI VALUES(#{teId},#{csCode},#{opCode},#{stuId},sysdate,#{status})
+  
+  </insert>
+  
+  <select id = "selectAttendCheck" parameterType="eljl.factory.bean.StuManageBean" resultType="int">
+  	SELECT COUNT(*)
+	FROM SI
+	WHERE SI_RL_SUB_TCODE = #{teId} AND SI_RL_SUB_CSCODE = #{csCode} AND SI_RL_SUB_OPCODE = #{opCode} AND TO_CHAR(SI_DATE,'YYYY-MM-DD') = TO_CHAR(sysdate,'YYYY-MM-DD')
+  </select>
+  
+  <select id = "editDateList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.StuManageBean">
+  	SELECT SI_RL_SUB_TCODE AS "teId",
+       SI_RL_SUB_CSCODE AS "csCode",
+       SI_RL_SUB_OPCODE AS "opCode",
+       SI_RL_STUCODE AS "stuId",
+       STU_NAME AS "stuName",
+       SI_DATE AS "attDate",
+       SI_STATUS AS "status"
+		FROM SI INNER JOIN STU ON SI_RL_STUCODE = STU_CODE
+		WHERE SI_RL_SUB_TCODE = #{teId} AND SI_RL_SUB_CSCODE = #{csCode} AND SI_RL_SUB_OPCODE=#{opCode} AND SI_RL_STUCODE=#{stuId}
+  </select>
+  
+  <select id = "beforeStatus" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.StuManageBean">
+  SELECT SI_RL_SUB_TCODE AS "teId",
+       SI_RL_SUB_CSCODE AS "csCode",
+       SI_RL_SUB_OPCODE AS "opCode",
+       SI_RL_STUCODE AS "stuId",
+       STU_NAME AS "stuName",
+       SI_DATE AS "attDate",  
+       SI_STATUS AS "status"
+		FROM SI INNER JOIN STU ON SI_RL_STUCODE = STU_CODE
+		WHERE SI_RL_SUB_TCODE = #{teId} AND SI_RL_SUB_CSCODE = #{csCode} AND SI_RL_SUB_OPCODE=#{opCode} AND SI_RL_STUCODE= #{stuId} AND TO_CHAR(SI_DATE,'YYYY-MM-DD') = TO_CHAR(#{attDate},'YYYY-MM-DD')
+  </select>
+  
+  <update id = "getEditAttend" parameterType="eljl.factory.bean.StuManageBean" >
+  	UPDATE SI SET SI_STATUS = #{status} WHERE SI_RL_SUB_TCODE = #{teId} AND SI_RL_SUB_CSCODE = #{csCode} AND SI_RL_SUB_OPCODE=#{opCode} AND SI_RL_STUCODE= #{stuId} AND TO_CHAR(SI_DATE,'YYYY-MM-DD') = TO_CHAR(#{attDate},'YYYY-MM-DD')
+  </update>
+
+	
+	<select id = "selectStuStatus" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.StuManageBean">
+ 	 SELECT SI_RL_SUB_TCODE AS "teId",
+       SI_RL_SUB_CSCODE AS "csCode",
+       SI_RL_SUB_OPCODE AS "opCode",
+       SI_RL_STUCODE AS "stuId",
+       STU_NAME AS "stuName",
+       SI_DATE AS "attDate",
+       SI_STATUS AS "status"
+		FROM SI INNER JOIN STU ON SI_RL_STUCODE = STU_CODE
+		WHERE SI_RL_SUB_TCODE = #{teId} AND SI_RL_SUB_CSCODE = #{csCode} AND SI_RL_SUB_OPCODE= #{opCode} AND SI_RL_STUCODE = #{stuId} and TO_CHAR(si_date,'YYYYMMDD') > TO_CHAR(sysdate-7,'YYYYMMDD') ORDER BY SI_DATE DESC
+  </select>
+	
+ </mapper>

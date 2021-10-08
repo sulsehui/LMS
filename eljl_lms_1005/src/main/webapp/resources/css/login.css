@@ -1,0 +1,101 @@
+@charset "UTF-8";
+
+body{
+	background-color: #f8f8f8;
+	margin:0px;	
+}
+
+#accesszone{
+	position:absolute; top:40%; left:46%;  
+	transform:translate(-50%, -50%);
+    padding:20px;
+}
+
+/* 체크박스영역 */
+#ckbox {
+	margin-left: 50px;	
+}
+
+/* 체크박스 */
+#ck-button {
+    margin-left: 17px;
+    margin-bottom: 8px;
+    width: 105px;
+    height: 37px;
+    text-align: center; /* 중앙정렬 */
+    float: left; /* 가로정렬 */
+    background-color:#FFFFFF;
+    border-radius: 6px;
+    border: 1px solid #D0D0D0;   
+    /* jsp style="zoom:1.5;" 체크크기 */
+}
+
+#ck-button label {
+    float:left;
+    width:4.0em;
+}
+
+/* 로그인버튼 */
+#box{
+  position: absolute;
+  top: 36%;
+  left: 45%;
+  width: 150px;
+  height: 40px;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(150%, 300%);
+  background:#375b7f;
+  color: #FFFFFF;
+  font-size: 18px;
+}
+
+/* 로그인내용들 */
+#textbox{
+  min-width: 350px;
+  min-height: 40px;
+}
+
+/* 회원가입 */
+#dubBtn{
+  position:absolute; left:25%;
+  margin-top: 20px;
+  margin-left: 3px;
+  text-align: center;
+  font-size: 17px;
+  color: #979797;
+}
+
+/* 비밀번호 변경 */
+#dubdubBtn{
+  position:absolute; left:50%;
+  margin-top: 20px;
+  margin-left: 5px;
+  text-align: center;
+  font-size: 17px;
+  color: #979797;
+}
+
+.title{
+	font-size : 50px;
+	text-align: center; font-style:italic;
+	font-weight : bold; font-family: "Palatino",Arial,Helvetica,sans-serif;
+	letter-spacing : 7px;
+	margin-bottom: 60px;
+	background:#375b7f;
+	 -webkit-background-clip: text;
+	 -webkit-text-fill-color: transparent;
+}
+
+label{
+	font-size: 23px;
+}
+
+input{
+  text-align:center;
+  border-radius: 30px;
+}
+
+a { 
+	text-decoration:none /* 밑줄없애기 */
+}

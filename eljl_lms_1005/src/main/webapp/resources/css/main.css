@@ -1,0 +1,184 @@
+@charset "UTF-8";
+
+
+    a:hover {
+   color: black;
+   }
+
+#test:hover {
+   color: black;
+}
+/* Remove the navbar's default margin-bottom and rounded borders */
+.navbar {
+   margin-bottom: 0;
+   border-radius: 0;
+   background-color: #375a7f;
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {
+   height: 450px
+}
+
+/* Set gray background color and 100% height */
+.sidenav {
+   padding-top: 20px;
+   background-color: #ffffff;
+   height: 100%;
+}
+
+/* Set black background color, C and some padding */
+footer {
+   background-color: #555;
+   color: blue;
+   padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+   .sidenav {
+      height: auto;
+      padding: 15px;
+   }
+   .row.content {
+      height: auto;
+   }
+}
+
+#bannerBox > ul{
+   margin-top: 5px;
+}
+
+#bannerBox2 > ul{
+   margin-top: 5px;
+}
+
+
+
+.bar{
+   font-size : 40px;
+   border-style: solid; 
+   border-width: 0 0 0 8px; 
+   padding: 8px; 
+   word-break: break-all;
+   border-color: #9DCFFF;
+   padding-left : 20px;
+}
+
+.bar2{
+   font-size : 40px;
+   border-style: solid; 
+   border-width: 0 0 0 8px; 
+   padding: 8px; 
+   word-break: break-all;
+   border-color: LightGray;
+   padding-left : 20px;
+   margin-top : 50px;
+}
+
+#myClass{
+   font-weight : bold;
+   text-align : center;
+   
+}
+
+.myClassList{
+   width:100%;
+   height:100%;
+   
+}
+
+.myOtherClassList{
+   width:100%;
+   height:100%;
+   
+   margin-top:2%;
+}
+
+#otherClassList{
+   font-weight : bold;
+   text-align : center;
+}
+
+
+.contents{
+   cursor : pointer;
+   border: 2px solid #EAEAEA;
+   width: 250px;
+   float : left;
+   margin-left:20px;
+   padding : 30px 0;
+   margin-bottom : 60px;
+   
+   display:block;  
+    border:1px #EAEAEA solid;
+    background-color:#EAEAEA;  
+    color:#333; 
+    transition:all 0.9s, color 0.3s;
+   
+}
+
+.contents:hover{color:#fff;}
+
+.hover:hover{ box-shadow: 250px 0 0 0 rgba(55, 90, 127, 0.82) inset, 
+                  -250px 0 0 0 rgba(55, 90, 127, 0.82) inset; }
+
+.hover2:hover{ box-shadow: 250px 0 0 0 rgba(189, 189, 189, 1) inset, 
+                  -250px 0 0 0  rgba(189, 189, 189, 1) inset; }
+
+
+.modal-body1{
+   margin-left:33%;
+   margin-right:auto;
+}
+
+.modal-body2{
+   margin-left:10%;
+   margin-right:auto;
+}
+
+.textBox{
+   margin-bottom:5%;
+}
+
+.dateBox{
+   margin-bottom:5%;
+   width:47%; 
+   text-align: center;
+}
+
+.classCreate1{
+   width:47%; 
+   text-align: center;
+   font-weight : bold;
+}
+
+.classCreate2{
+   width:100%; 
+   text-align: center;
+   font-weight : bold;
+   padding-right:15%;
+}
+
+
+
+
+.delButton{
+   width: 10%;
+   margin-left:90%
+}
+
+
+#modalBox{
+   
+   width: 90%;
+}
+.stuCancelIcon{
+width: 100%;
+}
+
+.cancelIcon{
+   
+   width:2%;
+   margin-right:75%;
+}

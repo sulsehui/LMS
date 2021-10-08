@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="eljl.database.mapper.commonMapper">
+ 
+ <select id="getTaskDate" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="eljl.factory.bean.BoardCreateBeanHS">
+ 	select  TK_TITLE as "title",
+             TK_STARTDATE as "startDate",
+             TK_ENDDATE as "endDate"
+	from tk where TK_TCODE = #{mbId} AND TK_CSCODE = #{csCode} AND TK_OPCODE = #{opCode} and TK_ENDDATE > sysdate
+ 	
+ </select>
+ 
+ <select id="getQuizDate" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="eljl.factory.bean.BoardCreateBeanHS">
+ 	select  QZ_TITLE as "title",
+             QZ_STARTDATE as "startDate",
+             QZ_ENDDATE as "endDate"
+	from qz where QZ_TCODE = #{mbId} AND QZ_CSCODE = #{csCode} AND QZ_OPCODE = #{opCode} and QZ_ENDDATE > sysdate
+ 	
+ </select>
+ 
+ <select id="getETCDate" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="eljl.factory.bean.BoardCreateBeanHS">
+ 	select  ETC_TITLE as "title",
+             ETC_STARTDATE as "startDate",
+             ETC_ENDDATE as "endDate"
+	from ETC where ETC_TCODE = #{mbId} AND ETC_CSCODE = #{csCode} AND ETC_OPCODE = #{opCode} and ETC_ENDDATE > sysdate
+ 	
+ </select>
+ 
+ <select id="getNtNumber" parameterType="eljl.factory.bean.NoticeBean" resultType="int">
+ 	select NVL(MAX(NT_CODE),0) from nt where NT_SJ_TCODE = #{mbId} AND NT_SJ_CSCODE = #{csCode} AND NT_SJ_OPCODE = #{opCode}
+ </select>
+ 
+ 
+ <insert id="insNotice" parameterType="eljl.factory.bean.NoticeBean">
+ 	insert into nt values (#{mbId},#{csCode},#{opCode},#{ntCode},#{ntType},#{ntContents},sysdate,#{ntTitle})
+ </insert>
+ 
+ <select id="getNoticeList" parameterType="eljl.factory.bean.NoticeBean" resultType="eljl.factory.bean.NoticeBean">
+ 	select NT_CODE AS "ntCode",
+            NT_TYPE AS "ntType",
+            NT_TITLE AS "ntTitle",
+            NT_CONTENTS AS "ntContents",
+            NT_CREATETIME AS "createTime"
+	FROM NT
+	WHERE NT_SJ_TCODE = #{mbId} AND NT_SJ_CSCODE = #{csCode} AND NT_SJ_OPCODE = #{opCode}
+	ORDER BY DECODE(NT_TYPE,'U',1),NT_TYPE ASC
+ </select>
+ 
+ <select id="selectNotice" parameterType="eljl.factory.bean.NoticeBean" resultType="eljl.factory.bean.NoticeBean">
+ 	select NT_CODE AS "ntCode",
+            NT_TYPE AS "ntType",
+            NT_TITLE AS "ntTitle",
+            NT_CONTENTS AS "ntContents",
+            NT_CREATETIME AS "createTime"
+	FROM NT
+	WHERE NT_SJ_TCODE = #{mbId} AND NT_SJ_CSCODE = #{csCode} AND NT_SJ_OPCODE = #{opCode} AND NT_CODE = #{ntCode}
+ </select>
+ 
+ <delete id="deleteNotice" parameterType="eljl.factory.bean.NoticeBean">
+ 	delete  from nt where NT_SJ_TCODE = #{mbId} AND NT_SJ_CSCODE = #{csCode} AND NT_SJ_OPCODE = #{opCode} AND NT_CODE = #{ntCode}
+ </delete>
+ 
+ <update id="updateNotice" parameterType="eljl.factory.bean.NoticeBean">
+ 	update nt set NT_TITLE = #{ntTitle} , NT_CONTENTS = #{ntContents} where NT_SJ_TCODE = #{mbId} AND NT_SJ_CSCODE = #{csCode} AND NT_SJ_OPCODE = #{opCode}
+ </update>
+ 
+ </mapper>

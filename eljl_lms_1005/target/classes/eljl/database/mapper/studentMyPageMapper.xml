@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="eljl.database.mapper.studentMyPageMapper">
+ <select id="getList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+ SELECT RL_SUB_TCODE AS TEID
+,RL_SUB_CSCODE AS CSCODE
+,RL_SUB_OPCODE AS OPCODE
+,RL_STUCODE AS STUID
+,RL_STATUS AS STATUS
+FROM RL WHERE 
+RL_SUB_TCODE = #{teId} AND 
+RL_SUB_CSCODE =#{csCode} AND 
+RL_SUB_OPCODE = #{opCode} AND 
+RL_STUCODE = #{stuId}
+ </select>
+ <select id="getStuGradeList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+SELECT *
+FROM STUTASKVIEW WHERE TEID=#{teId} AND CSCODE = #{csCode} AND OPCODE = #{opCode} AND STUID =#{stuId}
+UNION ALL
+SELECT *
+FROM STUQUIZVIEW WHERE TEID=#{teId} AND CSCODE = #{csCode} AND OPCODE = #{opCode} AND STUID =#{stuId}
+UNION ALL
+SELECT *
+FROM STUETCVIEW WHERE TEID=#{teId} AND CSCODE = #{csCode} AND OPCODE = #{opCode} AND STUID =#{stuId}
+ </select>
+ <select id="getStuSignList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+SELECT SI_RL_SUB_TCODE AS TEID
+       ,SI_RL_SUB_CSCODE AS CSCODE
+       ,SI_RL_SUB_OPCODE AS OPCODE
+       ,SI_RL_STUCODE AS STUID
+       ,SI_DATE AS STARTDATE
+       ,SI_STATUS AS STATUS
+FROM SI
+WHERE SI_RL_SUB_TCODE = #{teId} AND
+      SI_RL_SUB_CSCODE = #{csCode} AND
+      SI_RL_SUB_OPCODE = #{opCode} AND
+      SI_RL_STUCODE = #{stuId} AND
+      SI_STATUS != 'O'
+ </select>
+ <select id="getStuCosList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+ SELECT    COS_RL_SUB_TCODE AS TEID
+	      ,COS_RL_SUB_CSCODE AS CSCODE
+	      ,COS_RL_SUB_OPCODE AS OPCODE
+	      ,COS_RL_STUCODE AS STUID
+	      ,COS_CODE AS COSCODE
+	      ,COS_TITLE AS STUTITLE
+	      ,COS_CONTENTS AS "CONTENTS"
+	      ,COS_STATUS AS STATUS
+	      ,TO_CHAR(COS_CREATETIME,'YYYYMMDDHH24MISS') AS CREATEDATE
+	      ,TO_CHAR(COS_REQUESTDATE,'YYYYMMDDHH24MISS') AS REQUESTDATE
+	FROM COS
+	WHERE COS_RL_SUB_TCODE = #{teId} AND
+	      COS_RL_SUB_CSCODE = #{csCode} AND
+	      COS_RL_SUB_OPCODE = #{opCode} AND
+	      COS_RL_STUCODE = #{stuId}
+ </select>
+ <insert id="insertStuCos" parameterType="eljl.factory.bean.JunseoBean">
+ INSERT INTO COS VALUES(#{teId},#{csCode},#{opCode},#{stuId},#{cosCode},#{sjTitle},#{contents},'W',SYSDATE,#{requestDate})
+ </insert>
+ <select id="getMaxCosCode" resultType="int">
+ SELECT NVL(MAX(SUBSTR(COS_CODE, 9)),0) FROM COS WHERE (TO_CHAR(COS_CREATETIME, 'YYYYMMDD')) = TO_CHAR(SYSDATE, 'YYYYMMDD')
+ </select>
+ <delete id="deleteCos" parameterType="eljl.factory.bean.JunseoBean">
+ DELETE FROM COS WHERE
+COS_RL_SUB_TCODE = #{teId} AND 
+COS_RL_SUB_CSCODE = #{csCode} AND
+COS_RL_SUB_OPCODE = #{opCode} AND
+COS_RL_STUCODE = #{stuId} AND
+COS_CODE = #{cosCode}
+ </delete>
+  <update id="updateCos" parameterType="eljl.factory.bean.JunseoBean">
+ UPDATE COS SET COS_TITLE = #{stuTitle} , COS_CONTENTS = #{contents}, COS_CREATETIME = SYSDATE, COS_REQUESTDATE = #{requestDate}
+WHERE COS_RL_SUB_TCODE = #{teId} AND 
+COS_RL_SUB_CSCODE = #{csCode} AND
+COS_RL_SUB_OPCODE = #{opCode} AND
+COS_RL_STUCODE = #{stuId} AND
+COS_CODE = #{cosCode}
+ </update>
+ </mapper>

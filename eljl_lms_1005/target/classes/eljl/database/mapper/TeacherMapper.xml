@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="eljl.database.mapper.TeacherMapper">
+ 
+ <select id="getClass" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.SubjectBean">
+ 	select CS_CODE as "csCode",
+ 		   CS_CATEGORY as "csName"
+ 	 from tb_class where cs_code = #{csCode}
+ </select>
+ 
+ <select id="getSubject" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.SubjectBean">
+ 	select SUB_OPCODE as "opCode",
+ 				 SUB_OPNAME as "opName",
+                 SUB_STARTDATE as "startDate",
+                 SUB_ENDDATE as "endDate"
+     from sub where SUB_TCODE = #{mbId} and SUB_CSCODE = #{csCode} and SUB_OPCODE= #{opCode}
+ </select>
+ 
+ <select id="getScoreStandard" parameterType="eljl.factory.bean.SubjectBean" resultType="eljl.factory.bean.GradeBean">
+ 	select SS_CODE as "itemCode",
+            SS_NAME as "itemName",
+            SS_PERCENT as "itemPercent"
+	from ss
+	where SS_SJ_TCODE = #{mbId} and  SS_SJ_CSCODE = #{csCode} and SS_SJ_OPCODE = #{opCode}
+ </select>
+ 
+ <update id="updateSubject" parameterType="eljl.factory.bean.SubjectBean">
+ 	update sub set SUB_OPNAME = #{opName} , SUB_STARTDATE = #{startDate} , SUB_ENDDATE = #{endDate} where SUB_TCODE = #{mbId} and SUB_CSCODE = #{csCode} and SUB_OPCODE = #{opCode} 
+ </update>
+ 
+ <select id="getMaxScoreStandard" parameterType="eljl.factory.bean.GradeBean" resultType="string">
+ 	select max(SUBSTR(ss_code,'2','3')) from ss where SS_SJ_TCODE = #{mbId} AND SS_SJ_CSCODE = #{csCode} AND SS_SJ_OPCODE = #{opCode}
+ </select>
+ 
+ <insert id="addScoreStandard" parameterType="eljl.factory.bean.GradeBean">
+ 	insert into ss values (#{mbId},#{csCode},#{opCode},#{itemCode},#{itemName},#{itemPercent})
+ </insert>
+ 
+ <update id="updateScoreStandard" parameterType="eljl.factory.bean.GradeBean">
+ 	update ss set SS_PERCENT = #{itemPercent} where SS_SJ_TCODE = #{mbId} and SS_SJ_CSCODE = #{csCode} and SS_SJ_OPCODE = #{opCode} and SS_CODE = #{itemCode}
+ </update>
+ 
+ <delete id="minusScoreStandard" parameterType="eljl.factory.bean.GradeBean">
+ 	delete from ss where  SS_SJ_TCODE = #{mbId} AND SS_SJ_CSCODE = #{csCode} AND SS_SJ_OPCODE = #{opCode} AND SS_CODE= #{itemCode}
+ </delete>
+ 
+ </mapper>

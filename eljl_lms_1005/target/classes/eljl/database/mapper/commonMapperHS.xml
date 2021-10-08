@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+  <mapper namespace="eljl.database.mapper.commonMapperHS">
+ 
+ <select id="getCategoryList" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="eljl.factory.bean.BoardCreateBeanHS">
+SELECT SS_CODE AS "ssCode",
+       SS_NAME AS "ssName"
+    FROM TB_SCORESTANDARD WHERE SS_SJ_TCODE = #{mbId} AND SS_SJ_CSCODE =#{csCode} AND SS_SJ_OPCODE =#{opCode} AND SS_CODE NOT LIKE '%A%'
+ </select>
+ 
+  <select id="getEtcCode" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="Int">
+SELECT NVL(MAX(SUBSTR(ETC_CODE, 9)),0) FROM ETC WHERE (TO_CHAR(ETC_CREATETIME, 'YYYYMMDD')) = TO_CHAR(SYSDATE, 'YYYYMMDD')
+ </select>
+ 
+   <select id="getTaskCode" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="Int">
+SELECT NVL(MAX(SUBSTR(TK_CODE, 9)),0) FROM TK WHERE (TO_CHAR(TK_CREATETIME, 'YYYYMMDD')) = TO_CHAR(SYSDATE, 'YYYYMMDD')
+ </select>
+ 
+   <select id="getQuizCode" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="Int">
+SELECT NVL(MAX(SUBSTR(QZ_CODE, 9)),0) FROM QZ WHERE (TO_CHAR(QZ_CREATETIME, 'YYYYMMDD')) = TO_CHAR(SYSDATE, 'YYYYMMDD')
+ </select>
+ 
+ <insert id="insEtc" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+ INSERT INTO ETC VALUES (#{mbId}, #{csCode}, #{opCode}, #{ssCode}, #{numCode}, #{startDate}, #{endDate}, #{title}, #{contents}, #{stickerPath}, SYSDATE)
+ </insert>
+ 
+  <insert id="insTask" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+ INSERT INTO TK VALUES (#{mbId}, #{csCode}, #{opCode}, #{ssCode}, #{numCode}, #{startDate}, #{endDate}, #{title}, #{contents}, #{stickerPath}, SYSDATE)
+ </insert>
+ 
+  <insert id="insQuiz" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+ INSERT INTO QZ VALUES (#{mbId}, #{csCode}, #{opCode}, #{ssCode}, #{numCode}, #{startDate}, #{endDate}, #{title}, #{contents}, #{answer}, SYSDATE)
+ </insert>
+ 
+   <select id="allPostList" parameterType="eljl.factory.bean.BoardCreateBeanHS" resultType="eljl.factory.bean.BoardCreateBeanHS">
+SELECT TK_SSCODE AS "ssCode",
+       TK_CODE AS "numCode",
+      TK_TITLE AS "title",
+       TK_CONTENTS AS "contents",
+       TK_FILE AS "answer",
+       TK_STARTDATE AS "startDate",
+       TK_ENDDATE AS "endDate"
+       FROM TK
+      WHERE TK_TCODE = #{mbId} AND TK_CSCODE = #{csCode} AND TK_OPCODE= #{opCode} 
+         UNION ALL
+SELECT QZ_SSCODE AS "ssCode",
+         QZ_CODE AS "numCode",   
+      QZ_TITLE AS "title",
+       QZ_CONTENTS AS "contents",
+       QZ_ANSWER AS "answer",
+       QZ_STARTDATE AS "startDate",
+       QZ_ENDDATE AS "endDate"
+       FROM QZ
+   WHERE QZ_TCODE = #{mbId} AND QZ_CSCODE = #{csCode} AND QZ_OPCODE= #{opCode}
+       UNION ALL
+SELECT ETC_SSCODE AS "ssCode",
+      ETC_CODE AS "numCode",
+       ETC_TITLE AS "title",
+       ETC_CONTENTS AS "contents",
+       ETC_FILE AS "answer",
+       ETC_STARTDATE AS "startDate",
+       ETC_ENDDATE AS "endDate"
+       FROM ETC
+       WHERE ETC_TCODE = #{mbId} AND ETC_CSCODE = #{csCode} AND ETC_OPCODE= #{opCode}
+ </select>
+ 
+ 
+ <update id="updateTask" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    UPDATE TK SET
+    TK_STARTDATE = #{startDate}, TK_ENDDATE = #{endDate}, TK_TITLE = #{title}, TK_CONTENTS = #{contents}, TK_FILE = #{answer}, TK_CREATETIME = SYSDATE
+    WHERE 
+    TK_TCODE = #{mbId} AND TK_CSCODE = #{csCode} AND TK_OPCODE = #{opCode} AND TK_SSCODE = #{ssCode} AND TK_CODE = #{numCode}
+ </update>
+ 
+  <update id="updateTS" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    UPDATE TS SET
+    TS_TITLE = #{title}
+    WHERE 
+    TS_TK_TCODE = #{mbId} AND TS_TK_CSCODE = #{csCode} AND TS_TK_OPCODE = #{opCode} AND TS_TK_SSCODE = #{ssCode} AND TS_TKCODE = #{numCode}
+ </update>
+ 
+ <update id="updateQuiz" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    UPDATE QZ SET
+    QZ_STARTDATE = #{startDate}, QZ_ENDDATE = #{endDate}, QZ_TITLE = #{title}, QZ_CONTENTS = #{contents}, QZ_ANSWER = #{answer}, QZ_CREATETIME = SYSDATE
+    WHERE
+    QZ_TCODE = #{mbId} AND QZ_CSCODE = #{csCode} AND QZ_OPCODE = #{opCode} AND QZ_SSCODE = #{ssCode} AND QZ_CODE = #{numCode}
+ </update>
+ 
+ <update id="updateETC" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    UPDATE ETC SET
+   ETC_STARTDATE = #{startDate}, ETC_ENDDATE = #{endDate}, ETC_TITLE = #{title}, ETC_CONTENTS = #{contents}, ETC_FILE = #{answer}, ETC_CREATETIME = SYSDATE
+    WHERE
+    ETC_TCODE = #{mbId} AND ETC_CSCODE = #{csCode} AND ETC_OPCODE = #{opCode} AND ETC_SSCODE = #{ssCode} AND ETC_CODE = #{numCode}
+ </update>
+ 
+  <update id="updateES" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    UPDATE ES SET
+   ES_TITLE = #{title}
+    WHERE
+    ES_ETC_TCODE = #{mbId} AND ES_ETC_CSCODE = #{csCode} AND ES_ETC_OPCODE = #{opCode} AND ES_ETC_SSCODE = #{ssCode} AND ES_ETCCODE = #{numCode}
+ </update>
+ 
+  <delete id="deleteTask" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    DELETE FROM TK WHERE TK_TCODE = #{mbId} AND TK_CSCODE = #{csCode} AND TK_OPCODE = #{opCode} AND TK_SSCODE = #{ssCode} AND TK_CODE = #{numCode}
+ </delete>
+ 
+  <delete id="deleteTS" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    DELETE FROM TS WHERE TS_TK_TCODE = #{mbId} AND TS_TK_CSCODE = #{csCode} AND TS_TK_OPCODE = #{opCode} AND TS_TK_SSCODE = #{ssCode} AND TS_TKCODE = #{numCode}
+ </delete>
+ 
+  <delete id="deleteTF" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    DELETE FROM TF WHERE TF_TS_TCODE = #{mbId} AND TF_TS_CSCODE = #{csCode} AND TF_TS_OPCODE = #{opCode} AND TF_TS_SSCODE = #{ssCode} AND TF_TS_TKCODE = #{numCode}
+ </delete>
+ 
+  <delete id="deleteQuiz" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    DELETE FROM QZ WHERE QZ_TCODE = #{mbId} AND QZ_CSCODE = #{csCode} AND QZ_OPCODE = #{opCode} AND QZ_SSCODE = #{ssCode} AND QZ_CODE = #{numCode}
+ </delete> 
+ 
+  <delete id="deleteQS" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    DELETE FROM QS WHERE QS_QZ_TCODE = #{mbId} AND QS_QZ_CSCODE = #{csCode} AND QS_QZ_OPCODE = #{opCode} AND QS_QZ_SSCODE = #{ssCode} AND QS_QZCODE = #{numCode}
+ </delete>
+ 
+  <delete id="deleteETC" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    DELETE FROM ETC WHERE ETC_TCODE = #{mbId} AND ETC_CSCODE = #{csCode} AND ETC_OPCODE = #{opCode} AND ETC_SSCODE = #{ssCode} AND ETC_CODE = #{numCode}
+ </delete>
+ 
+   <delete id="deleteES" parameterType="eljl.factory.bean.BoardCreateBeanHS">
+    DELETE FROM ES WHERE ES_ETC_TCODE = #{mbId} AND ES_ETC_CSCODE = #{csCode} AND ES_ETC_OPCODE = #{opCode} AND ES_ETC_SSCODE = #{ssCode} AND ES_ETCCODE = #{numCode}
+ </delete>
+ 
+  <insert id="submitQuiz" parameterType="eljl.factory.bean.BoardSubmitBeanHS">
+ INSERT INTO QS VALUES (#{mbId}, #{csCode}, #{opCode}, #{ssCode}, #{numCode}, #{stuId}, #{answer}, '0', SYSDATE)
+ </insert>
+ 
+ 
+ <insert id="submitTask" parameterType="eljl.factory.bean.BoardSubmitBeanHS">
+ INSERT INTO TS VALUES (#{mbId}, #{csCode}, #{opCode}, #{ssCode}, #{numCode}, #{stuId}, #{title}, #{answer}, '0', SYSDATE)
+ </insert>
+ 
+ <insert id="submitTask2" parameterType="eljl.factory.bean.BoardSubmitBeanHS">
+ INSERT INTO TF VALUES (#{mbId}, #{csCode}, #{opCode}, #{ssCode}, #{numCode}, #{stuId}, SEQ.NEXTVAL, #{filePath})
+ </insert>
+ 
+ <!-- 과제에서 파일 잡아야함 -->
+  <insert id="submitETC" parameterType="eljl.factory.bean.BoardSubmitBeanHS">
+ INSERT INTO ES VALUES (#{mbId}, #{csCode}, #{opCode}, #{ssCode}, #{numCode}, #{stuId}, #{title}, #{answer}, '0', '', SYSDATE)
+ </insert>
+ 
+ <select id="resultCheckQuiz" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+SELECT QZ_ANSWER AS "answer" 
+FROM QZ 
+WHERE QZ_TCODE = #{mbId} AND QZ_CSCODE = #{csCode} AND QZ_OPCODE= #{opCode} AND QZ_SSCODE = #{ssCode} AND QZ_CODE = #{numCode}
+ UNION ALL
+SELECT QS_ANSWER AS "answer" 
+FROM QS 
+WHERE QS_QZ_TCODE = #{mbId} AND QS_QZ_CSCODE = #{csCode} AND QS_QZ_OPCODE= #{opCode} AND QS_QZ_SSCODE = #{ssCode} AND QS_QZCODE = #{numCode} AND QS_STUCODE =#{stuId}
+ </select>
+ 
+   <delete id="cancelETCReport" parameterType="eljl.factory.bean.BoardSubmitBeanHS">
+    DELETE FROM ES WHERE ES_ETC_TCODE = #{mbId} AND ES_ETC_CSCODE = #{csCode} AND ES_ETC_OPCODE = #{opCode} AND ES_ETC_SSCODE = #{ssCode} AND ES_ETCCODE = #{numCode}
+   </delete>
+ 
+ 
+  <select id="viewMyETC" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+   SELECT ES_ANSWER AS "answer" 
+   FROM ES 
+   WHERE ES_ETC_TCODE = #{mbId} AND ES_ETC_CSCODE = #{csCode} AND ES_ETC_OPCODE= #{opCode} AND ES_ETC_SSCODE = #{ssCode} AND ES_ETCCODE = #{numCode}
+ </select>
+
+  <select id="viewMyTask" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+   SELECT TS_CONTENTS AS "answer" 
+   FROM TS
+   WHERE TS_TK_TCODE = #{mbId} AND TS_TK_CSCODE = #{csCode} AND TS_TK_OPCODE= #{opCode} AND TS_TK_SSCODE = #{ssCode} AND TS_TKCODE = #{numCode} AND TS_STUCODE = #{stuId}
+   UNION ALL
+   SELECT TS
+   _PATH AS "answer" 
+   FROM TF
+   WHERE TF_TS_TCODE = #{mbId} AND TF_TS_CSCODE = #{csCode} AND TF_TS_OPCODE= #{opCode} AND TF_TS_SSCODE = #{ssCode} AND TF_TS_TKCODE = #{numCode} AND TF_TS_STUCODE = #{stuId}
+ </select>
+
+  <delete id="cancelTask" parameterType="eljl.factory.bean.BoardSubmitBeanHS">
+    DELETE FROM TS WHERE TS_TK_TCODE = #{mbId} AND TS_TK_CSCODE = #{csCode} AND TS_TK_OPCODE = #{opCode} AND TS_TK_SSCODE = #{ssCode} AND TS_TKCODE = #{numCode} AND TS_STUCODE = #{stuId}
+  </delete>
+    <delete id="cancelTask2" parameterType="eljl.factory.bean.BoardSubmitBeanHS">
+    DELETE FROM TF WHERE TF_TS_TCODE = #{mbId} AND TF_TS_CSCODE = #{csCode} AND TF_TS_OPCODE = #{opCode} AND TF_TS_SSCODE = #{ssCode} AND TF_TS_TKCODE = #{numCode} AND TF_TS_STUCODE = #{stuId}
+  </delete>
+ 
+   <select id="viewAllReport" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+   SELECT RL_SUB_TCODE AS "teId",
+       RL_SUB_CSCODE AS "csCode",
+       RL_SUB_OPCODE AS "opCode",
+       RL_STUCODE AS "stuId",
+       STU_NAME AS "stuName"
+      FROM RL INNER JOIN STU ON RL_STUCODE = STU_CODE
+      WHERE RL_SUB_TCODE = #{mbId} AND RL_SUB_CSCODE = #{csCode} AND RL_SUB_OPCODE= #{opCode}
+ </select>
+ 
+  <select id="selectStuAnswer" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+   SELECT TS_CONTENTS AS "answer" 
+   FROM TS
+   WHERE TS_TK_TCODE = #{mbId} AND TS_TK_CSCODE = #{csCode} AND TS_TK_OPCODE= #{opCode} AND TS_TK_SSCODE = #{ssCode} AND TS_TKCODE = #{numCode}
+ </select>
+ 
+ 
+    <select id="selectStuReport" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+   SELECT TS_PATH AS "answer" 
+   FROM TF
+   WHERE TF_TS_TCODE = #{mbId} AND TF_TS_CSCODE = #{csCode} AND TF_TS_OPCODE= #{opCode} AND TF_TS_SSCODE = #{ssCode} AND TF_TS_TKCODE = #{numCode}
+ </select>
+ 
+ 
+    <select id="viewAllETC" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+   SELECT RL_SUB_TCODE AS "teId",
+       RL_SUB_CSCODE AS "csCode",
+       RL_SUB_OPCODE AS "opCode",
+       RL_STUCODE AS "stuId",
+       STU_NAME AS "stuName"
+      FROM RL INNER JOIN STU ON RL_STUCODE = STU_CODE
+      WHERE RL_SUB_TCODE = #{mbId} AND RL_SUB_CSCODE = #{csCode} AND RL_SUB_OPCODE= #{opCode}
+ </select>
+ 
+ 
+ 
+    <select id="selectStuETC" parameterType="eljl.factory.bean.BoardSubmitBeanHS" resultType="eljl.factory.bean.BoardSubmitBeanHS">
+   SELECT ES_ANSWER AS "answer" 
+   FROM ES
+   WHERE ES_ETC_TCODE = #{mbId} AND ES_ETC_CSCODE = #{csCode} AND ES_ETC_OPCODE= #{opCode} AND ES_ETC_SSCODE = #{ssCode} AND ES_ETCCODE = #{numCode}
+ </select>
+ 
+ </mapper>

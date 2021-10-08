@@ -1,0 +1,111 @@
+@charset "UTF-8";
+
+body{
+	background-color: #f8f8f8;
+	margin:0px;	
+}
+
+#accesszone{
+	position:absolute; top:50%; left:50%;
+	transform:translate(-50%, -50%);
+    padding:30px;
+}
+
+/* 회원가입 버튼*/
+#box{
+  position: relative;
+  width: 345px;
+  min-height: 35px;
+  left: 56px;
+  margin-top: 15px;
+  color: #FFFFFF;
+  background:#375b7f;
+}
+/* 회원가입 박스*/
+#boxbox{
+  display: flex;
+}
+
+/* 회원가입 내용들 */
+#textbox{
+  position: relative;
+  width: 340px;
+  min-height: 35px;
+  left: 55px;
+
+}
+
+/* 이메일 선택 박스 */
+#mbox {
+	position: relative;
+	width: 145px;
+	bottom: -1px;
+	left: 60px;
+	min-height: 35px;
+	border-radius: 20px;
+}
+
+/* 로그인페이지 */
+#lbox{
+	position: relative;
+	top: -500px;
+	left: -200px;
+}
+
+/* 파일박스 */
+.fbox{
+  border-radius: 0px 0px 0px 0px;
+  text-align: center; /* 중앙정렬 */
+}
+
+
+/* 타이틀 회원가입 */
+.title{
+	font-size : 40px;
+	text-align: center; font-style:italic;
+	font-weight : bold; font-family: "Palatino",Arial,Helvetica,sans-serif;
+	letter-spacing : 7px;
+	margin-left: -30px;
+	margin-bottom: 70px;
+	background:#375b7f;
+	 -webkit-background-clip: text;
+	 -webkit-text-fill-color: transparent;
+}
+
+/* 중복검사 */
+.button{
+	width:110px;
+	height:33px;
+	margin-top:10px;
+    border-radius:50px; border:0px;
+    position: relative;
+    left: 57%;
+ 	color: #FFFFFF;
+	font-size: 14px; 
+	letter-spacing: 2px;
+	text-align: center;
+	cursor:pointer;
+    background:#375b7f;
+}
+
+
+.item{
+	margin-bottom:7px;
+	font-size : 10px; color:#747474;
+}
+
+input{
+  text-align:center;
+  border-radius: 20px;
+}
+
+span{
+  position: relative;
+  left: 58px;
+  bottom: -2px;
+  visibility: visible;
+}
+
+a { 
+	text-decoration:none 
+}

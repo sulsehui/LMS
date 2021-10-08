@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="eljl.database.mapper.teacherStuManageMapper">
+ <select id="getAllStudentList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+ 	SELECT *
+	FROM ALLSTULIST
+   	WHERE
+    TEID = #{teId}
+    AND CSCODE = #{csCode} 
+    AND OPCODE = #{opCode}
+ </select>
+ <select id="getGradeList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+SELECT *
+FROM TASKVIEW WHERE TEID=#{teId} AND CSCODE = #{csCode} AND OPCODE = #{opCode} AND STUID =#{stuId}
+UNION ALL
+SELECT *
+FROM QUIZVIEW WHERE TEID=#{teId} AND CSCODE = #{csCode} AND OPCODE = #{opCode} AND STUID =#{stuId}
+UNION ALL
+SELECT *
+FROM ETCVIEW WHERE TEID=#{teId} AND CSCODE = #{csCode} AND OPCODE = #{opCode} AND STUID =#{stuId}
+ </select>
+ <select id="getSignList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+SELECT SI_RL_SUB_TCODE AS TEID
+       ,SI_RL_SUB_CSCODE AS CSCODE
+       ,SI_RL_SUB_OPCODE AS OPCODE
+       ,SI_RL_STUCODE AS STUID
+       ,SI_DATE AS STARTDATE
+       ,SI_STATUS AS STATUS
+FROM SI
+WHERE SI_RL_SUB_TCODE = #{teId} AND
+      SI_RL_SUB_CSCODE = #{csCode} AND
+      SI_RL_SUB_OPCODE = #{opCode} AND
+      SI_RL_STUCODE = #{stuId} AND
+      SI_STATUS != 'O'
+ </select>
+ <select id="getCounselingList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+ SELECT    CO_RL_SUB_TCODE AS TEID
+	      ,CO_RL_SUB_CSCODE AS CSCODE
+	      ,CO_RL_SUB_OPCODE AS OPCODE
+	      ,CO_RL_STUCODE AS STUID
+	      ,CO_CODE AS COCODE
+	      ,CO_TITLE AS SJTITLE
+	      ,CO_CONTENTS AS "CONTENTS"
+	      ,TO_CHAR(CO_CREATETIME,'YYYYMMDDHH24MISS') AS CREATEDATE
+	FROM CO
+	WHERE CO_RL_SUB_TCODE = #{teId} AND
+	      CO_RL_SUB_CSCODE = #{csCode} AND
+	      CO_RL_SUB_OPCODE = #{opCode} AND
+	      CO_RL_STUCODE = #{stuId}
+ </select>
+ <select id="getCosList" parameterType="eljl.factory.bean.StuManageBean" resultType="eljl.factory.bean.JunseoBean">
+  SELECT    COS_RL_SUB_TCODE AS TEID
+	      ,COS_RL_SUB_CSCODE AS CSCODE
+	      ,COS_RL_SUB_OPCODE AS OPCODE
+	      ,COS_RL_STUCODE AS STUID
+	      ,COS_CODE AS COSCODE
+	      ,COS_TITLE AS STUTITLE
+	      ,COS_CONTENTS AS "CONTENTS"
+	      ,COS_STATUS AS STATUS
+	      ,TO_CHAR(COS_CREATETIME,'YYYYMMDDHH24MISS') AS CREATEDATE
+	      ,TO_CHAR(COS_REQUESTDATE,'YYYYMMDDHH24MISS') AS REQUESTDATE
+	FROM COS
+	WHERE COS_RL_SUB_TCODE = #{teId} AND
+	      COS_RL_SUB_CSCODE = #{csCode} AND
+	      COS_RL_SUB_OPCODE = #{opCode} AND
+	      COS_RL_STUCODE = #{stuId} AND
+	      COS_STATUS != 'X' 
+ </select>
+ <update id="updateStuSign" parameterType="eljl.factory.bean.JunseoBean">
+ UPDATE SI SET SI_STATUS =#{status} 
+ WHERE 
+ SI_RL_SUB_TCODE = #{teId} AND 
+ SI_RL_SUB_CSCODE = #{csCode} AND 
+ SI_RL_SUB_OPCODE = #{opCode} AND 
+ SI_RL_STUCODE = #{stuId} AND 
+ SI_DATE = TO_DATE(#{createDate},'YYYYMMDDHH24MISS')
+ </update>
+ <update id="updateStuCounSeling" parameterType="eljl.factory.bean.JunseoBean">
+ UPDATE CO SET CO_TITLE = #{sjTitle} , CO_CONTENTS = #{contents}, CO_CREATETIME = SYSDATE 
+WHERE CO_RL_SUB_TCODE = #{teId} AND 
+CO_RL_SUB_CSCODE = #{csCode} AND
+CO_RL_SUB_OPCODE = #{opCode} AND
+CO_RL_STUCODE = #{stuId} AND
+CO_CODE = #{coCode}
+ </update>
+ <delete id="deleteStuCounSeling" parameterType="eljl.factory.bean.JunseoBean">
+ DELETE FROM CO WHERE
+CO_RL_SUB_TCODE = #{teId} AND 
+CO_RL_SUB_CSCODE = #{csCode} AND
+CO_RL_SUB_OPCODE = #{opCode} AND
+CO_RL_STUCODE = #{stuId} AND
+CO_CODE = #{coCode}
+ </delete>
+ <select id="getMaxCoCode" resultType="int">
+ SELECT NVL(MAX(SUBSTR(CO_CODE, 9)),0) FROM CO WHERE (TO_CHAR(CO_CREATETIME, 'YYYYMMDD')) = TO_CHAR(SYSDATE, 'YYYYMMDD')
+ </select>
+ <insert id="insertStuCounSeling" parameterType="eljl.factory.bean.JunseoBean">
+ INSERT INTO CO VALUES(#{teId},#{csCode},#{opCode},#{stuId},#{coCode},#{sjTitle},#{contents},SYSDATE)
+ </insert>
+ 
+ <update id="updateEtcGrade" parameterType="eljl.factory.bean.JunseoBean">
+ UPDATE ES SET ES_GRADE = #{grade} WHERE
+	ES_ETC_TCODE = #{teId} AND
+	ES_ETC_CSCODE = #{csCode} AND
+	ES_ETC_OPCODE = #{opCode} AND
+	ES_ETC_SSCODE = #{ssCode} AND
+	ES_ETCCODE = #{sjCode} AND
+	ES_STUCODE = #{stuId}
+ </update>
+ 
+ <update id="updateTaskGrade" parameterType="eljl.factory.bean.JunseoBean">
+ UPDATE TS SET TS_GRADE = #{grade} WHERE 
+	TS_TK_TCODE = #{teId} AND
+	TS_TK_CSCODE = #{csCode} AND
+	TS_TK_OPCODE = #{opCode} AND
+	TS_TK_SSCODE = #{ssCode} AND
+	TS_TKCODE = #{sjCode} AND
+	TS_STUCODE = #{stuId}
+ </update>
+ 
+ <update id="updateQuizGrade" parameterType="eljl.factory.bean.JunseoBean">
+ UPDATE QS SET QS_GRADE = #{grade} WHERE
+	QS_QZ_TCODE = #{teId} AND
+	QS_QZ_CSCODE = #{csCode} AND
+	QS_QZ_OPCODE = #{opCode} AND
+	QS_QZ_SSCODE = #{ssCode} AND
+	QS_QZCODE = #{sjCode} AND
+	QS_STUCODE = #{stuId}
+ </update>
+ 
+ <update id="yesOrNoCos" parameterType="eljl.factory.bean.JunseoBean">
+ UPDATE COS SET COS_STATUS = #{status}
+WHERE COS_RL_SUB_TCODE = #{teId} AND 
+COS_RL_SUB_CSCODE = #{csCode} AND
+COS_RL_SUB_OPCODE = #{opCode} AND
+COS_RL_STUCODE = #{stuId} AND
+COS_CODE = #{cosCode}
+ </update>
+ </mapper>
+
+ 

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ 
+ <mapper namespace="eljl.database.mapper.memberMapper">
+ 
+ 	<insert id="joinTe" parameterType="eljl.factory.bean.UserInfoBean" >
+ 		insert into tb_t values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'W',#{stickerPath},ROUND(DBMS_RANDOM.VALUE(111111, 999999),0))
+ 	</insert>
+ 	
+ 	<insert id="joinStu" parameterType="eljl.factory.bean.UserInfoBean" >
+ 		insert into stu values(#{mbId},#{mbName},#{mbPhone},#{mbMail},#{mbPw},'O' ,ROUND(DBMS_RANDOM.VALUE(111111, 999999),0), NULL)
+ 	</insert>
+ 	
+ 	<select id="isTeId" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from tb_t where T_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="getTePw" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select T_PASSWORD as "mbPw" from tb_t where T_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="dupCheckTe" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from tb_t where T_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="dupCheckStu" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from stu where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="isStuId" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select count(*) from stu where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="getStuPw" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select STU_PASSWORD as "mbPw" from STU where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="selectTeMail" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select T_MAIL from tb_t where T_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="selectStuMail" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select STU_MAIL from stu where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="getTeAuth" parameterType="string" resultType="string">
+ 		select T_AUTH as "mbAuth" from TB_T where T_CODE = #{mbId} <!-- and t_auth = #{mbAuth} -->
+ 	</select>
+ 	
+ 	<select id = "getStuAuth" parameterType="string" resultType="string">
+ 		select STU_AUTH as "mbAuth" from STU where STU_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<update id="updateTeNewAuth" parameterType="eljl.factory.bean.UserInfoBean">
+ 		update tb_t set T_AUTH = ROUND(DBMS_RANDOM.VALUE(111111, 999999),0), T_PASSWORD = #{mbPw} where T_CODE = #{mbId}
+ 	</update>
+ 	
+ 	<update id="updateStuNewAuth" parameterType="eljl.factory.bean.UserInfoBean">
+ 		update STU set STU_AUTH = ROUND(DBMS_RANDOM.VALUE(111111, 999999),0), STU_PASSWORD = #{mbPw} where STU_CODE = #{mbId}
+ 	</update>
+ 	
+ 	<update id="updateAdNewAuth" parameterType="eljl.factory.bean.UserInfoBean">
+ 		update TB_ADMIN set AM_ACCESS = #{mbPw} where AM_CODE = #{mbId}
+ 	</update>
+ 	
+ 	<insert id = "insTeHistory" parameterType="eljl.factory.bean.HistoryBean">
+ 		insert into hst values(#{mbId}, #{publicIp}, #{privateIp}, sysdate , #{method})
+ 	</insert>
+ 	
+ 	<insert id = "insStuHistory" parameterType="eljl.factory.bean.HistoryBean">
+ 		insert into hss values(#{mbId}, #{publicIp}, #{privateIp}, sysdate , #{method})
+ 	</insert>
+ 	
+ 	<insert id = "insAmHistory" parameterType="eljl.factory.bean.HistoryBean">
+ 		insert into TB_HISTORY_AM values(#{mbId}, #{publicIp}, #{privateIp}, sysdate , #{method})
+ 	</insert>
+ 	
+ 	<select id = "sumTeHistory" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select sum(HST_METHOD) from HST where HST_TCODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id = "sumStuHistory" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select sum(HSS_METHOD) from HSS where HSS_STUCODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id = "sumAmHistory" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select sum(AM_METHOD) from TB_HISTORY_AM where AM_AMCODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="getAmPw" parameterType="eljl.factory.bean.UserInfoBean" resultType="string">
+ 		select AM_ACCESS as "mbPw" from TB_ADMIN where AM_CODE = #{mbId}
+ 	</select>
+ 	
+ 	<select id="teStatusCheck" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select  count(*)
+		from tb_t where T_CODE = #{mbId} AND T_STATUS = 'G'
+ 	</select>
+ 	
+ 	<select id="stuStatusCheck" parameterType="eljl.factory.bean.UserInfoBean" resultType="int">
+ 		select  count(*)
+		from stu where STU_CODE = #{mbId} AND STU_STATUS = 'O'
+ 	</select>
+ 	
+ </mapper>

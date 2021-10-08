@@ -1,0 +1,171 @@
+  /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 450px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 10px;
+        
+      }
+      .row.content {height:auto;} 
+    }
+    
+    a:hover {
+	color: black;
+}
+
+	#test:hover {
+	color: black;
+}
+/* Remove the navbar's default margin-bottom and rounded borders */
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+	background-color: #375a7f;
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {
+	height: 450px
+}
+
+/* Set gray background color and 100% height */
+.sidenav {
+	padding-top: 20px;
+	background-color: #ffffff;
+	height: 100%;
+}
+
+/* Set black background color, C and some padding */
+footer {
+	background-color: #555;
+	color: blue;
+	padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+	.sidenav {
+		height: auto;
+		padding: 15px;
+	}
+	.row.content {
+		height: auto;
+	}
+}
+
+body {
+  text-align: center;
+  padding: 50px;
+}
+
+.button {
+  display: inline-block;
+  border : 1px solid #aec9f5; 
+  background-color: #ffffff;
+  text-transform: uppercase;
+  color : #757575;
+  padding: 20px 30px;
+  border-radius: 5px;
+  box-shadow: 0px 17px 10px -10px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  -webkit-transition: all ease-in-out 300ms;
+  transition: all ease-in-out 300ms;
+  width : 200px;
+  height : 50px;
+  line-height:10px;
+  font-weight : bold;
+  margin-right:50px;
+}
+.button:hover {
+  box-shadow: 0px 37px 20px -20px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translate(0px, -10px) scale(1.2);
+          transform: translate(0px, -10px) scale(1.2);
+}
+
+#bannerBox > ul{
+	margin-top: 5px;
+	margin-left: 15px;
+}
+
+#bannerBox2 > ul{
+	margin-top: 5px;
+}
+
+
+.Attendmanage{
+	margin-right:-5%; 
+	margin-top: 30px; 
+	height: 85px;
+}
+
+.panel panel-info{
+	 padding-right : auto;
+	 padding-left : auto;
+}
+
+.panel-heading{
+	font-weight:bold; 
+	text-align:center; 
+	margin-left: 330px; 
+	margin-right: 300px;
+}
+
+.col-xs-12 panel-body{
+	 position : absolute;
+	 padding-right : auto;
+	 padding-left : auto;
+}
+
+
+#stuList{
+ 	  width: 60%;
+	  font-weight:bold;
+	  padding-right :30%;
+	
+	  margin-right : 20%;
+	  margin-left : 20%;
+	
+	
+}
+
+.btn btn-default btn-lg{
+	 margin-left: 30px; 
+	 margin-top: 50px; 
+	 width: 400px;
+	  height: 60px; 
+}
+
+.container{
+	  position: absolute;
+	  width: 52%;
+	  height: auto;
+ 	  padding-right :15%;
+	  padding-left :5%;
+	 
+	  margin-left : 13%;
+	  margin-top : -2%;
+
+}
+
+
+
+
+
+
+
+
